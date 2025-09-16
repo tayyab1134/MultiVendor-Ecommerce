@@ -1,0 +1,39 @@
+const mongoose = require("mongoose");
+
+const couponCodeSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, "Please enter your coupoun code name!"],
+    unique: true,
+  },
+
+  value: {
+    type: Number,
+    required: true,
+  },
+
+  minAmount: {
+    type: Number,
+  },
+
+  maxAmount: {
+    type: Number,
+  },
+
+  shop: {
+    type: Object,
+    required: true,
+  },
+
+  selectedProducts: {
+    type: [String],
+    default: [],
+  },
+
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+  },
+});
+
+module.exports = mongoose.model("CouponCode", couponCodeSchema);
