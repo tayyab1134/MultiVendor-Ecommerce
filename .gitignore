@@ -1,3 +1,8 @@
-node_modules
-.uploads
-./backend/config/.env
+# Ignore node modules
+node_modules/
+
+# Ignore uploads folder
+uploads/
+
+# Ignore environment file
+backend/config/.env
