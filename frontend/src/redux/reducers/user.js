@@ -2,6 +2,12 @@ import { createReducer } from "@reduxjs/toolkit";
 
 const initialState = {
   isAuthenticated: false,
+  loading: true, // ✅ important
+  user: null,
+  addressloading: false,
+  successMessage: null,
+  users: [],
+  Userloading: false,
 };
 
 export const userReducer = createReducer(initialState, (builder) => {
@@ -19,7 +25,53 @@ export const userReducer = createReducer(initialState, (builder) => {
       state.isAuthenticated = false;
       state.error = action.payload;
     })
+
+    // update user info
+    .addCase("updateUserInfoRequest", (state) => {
+      state.loading = true;
+    })
+    .addCase("updateUserInfoSuccess", (state, action) => {
+      state.loading = false;
+      state.user = action.payload;
+    })
+    .addCase("updateUserInfoFailure", (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
+    // Update User Address
+    .addCase("updateUserAddressRequest", (state) => {
+      state.addressloading = true;
+    })
+    .addCase("updateUserAddressSuccess", (state, action) => {
+      state.addressloading = false;
+      state.successMessage = action.payload.successMessage;
+      state.user = action.payload.user;
+    })
+    .addCase("updateUserAddressFailure", (state, action) => {
+      state.addressloading = false;
+      state.error = action.payload;
+    })
+
+    //delete user address
+
+    .addCase("deleteUserAddressRequest", (state) => {
+      state.addressLoading = true;
+    })
+    .addCase("deleteUserAddressSuccess", (state, action) => {
+      state.addressLoading = false;
+      state.successMessage = action.payload.successMessage;
+      state.user = action.payload.user;
+    })
+    .addCase("deleteUserAddressFailed", (state, action) => {
+      state.addressLoading = false;
+      state.error = action.payload;
+    })
+
     .addCase("clearErrors", (state) => {
       state.error = null;
+    })
+
+    .addCase("clearMessages", (state) => {
+      state.successMessage = null;
     });
 });

@@ -1,11 +1,11 @@
 import { createReducer, createAction } from "@reduxjs/toolkit";
 const initialState = {
   isLoading: true,
-  //product: null,
-  //products: [],
-  //success: false,
-  //error: null,
-  //allProducts: [],
+  product: null,
+  products: [],
+  success: false,
+  error: null,
+  allProducts: [],
 };
 export const productCreateRequest = createAction("productCreateRequest");
 export const productCreateSuccess = createAction("productCreateSuccess");

@@ -14,11 +14,17 @@ import {
   ShopCreatePage,
   SellerActivationPage,
   ShopLoginPage,
+  PaymentPage,
+  OrderSuccessPage,
 } from "./routes/Routes.jsx";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { server } from "./server.js";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import Store from "./redux/store.js";
 import { loadSeller, loadUser } from "./redux/actions/user.js";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
@@ -37,15 +43,43 @@ import { getAllProducts } from "./redux/actions/product.js";
 import { getAllEvents } from "./redux/actions/event.js";
 
 const App = () => {
+  const [stripeApiKey, setStripeApiKey] = useState("");
+  async function getStripeApikey() {
+    try {
+      const { data } = await axios.get(`${server}/payment/stripe-api-key`);
+      setStripeApiKey(data?.stripeapikey);
+    } catch (error) {
+      toast.error("Error fetching Stripe API key:", error);
+    }
+  }
   useEffect(() => {
     Store.dispatch(loadUser());
     Store.dispatch(loadSeller());
     Store.dispatch(getAllProducts());
     Store.dispatch(getAllEvents());
+    getStripeApikey();
   }, []);
+
+  console.log(stripeApiKey);
 
   return (
     <BrowserRouter>
+      {/* Adding the Payment  Page + Stripe Route  */}
+      {stripeApiKey && (
+        <Elements stripe={loadStripe(stripeApiKey)}>
+          <Routes>
+            <Route
+              path="/payment"
+              element={
+                <ProtectedRoute>
+                  <PaymentPage />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </Elements>
+      )}
+
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -149,6 +183,8 @@ const App = () => {
             </SellerProtectedRoute>
           }
         />
+        {/* Order SuccessPage */}
+        <Route path="/orders/success" element={<OrderSuccessPage />} />
       </Routes>
       <ToastContainer
         position="bottom-center"

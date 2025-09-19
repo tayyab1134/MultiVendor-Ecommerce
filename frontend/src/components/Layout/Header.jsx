@@ -16,6 +16,8 @@ import { AiOutlineHeart, AiOutlineShoppingCart } from "react-icons/ai";
 
 function Header({ activeHeading }) {
   const { isAuthenticated, user } = useSelector((state) => state.user);
+  const { cart } = useSelector((state) => state.cart);
+  const { wishlist } = useSelector((state) => state.wishlist);
   const allProducts = useSelector((state) => state.products.allProducts);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState([]);
@@ -154,6 +156,7 @@ function Header({ activeHeading }) {
               </div>
 
               <div className="flex">
+                {/* WishList*/}
                 <div className={`${styles.normalFlex}`}>
                   <div
                     className="relative cursor-pointer mr-[15px]"
@@ -161,11 +164,11 @@ function Header({ activeHeading }) {
                   >
                     <AiOutlineHeart size={30} color="rgb(255 255 255 / 83%)" />
                     <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 text-white text-[12px] leading-tight text-center">
-                      0
+                      {wishlist && wishlist.length}
                     </span>
                   </div>
                 </div>
-
+                {/* Cart  */}
                 <div className={`${styles.normalFlex}`}>
                   <div
                     className="relative cursor-pointer mr-[15px]"
@@ -176,7 +179,7 @@ function Header({ activeHeading }) {
                       color="rgb(255 255 255 / 83%)"
                     />
                     <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 text-white text-[12px] leading-tight text-center">
-                      5
+                      {cart && cart.length}
                     </span>
                   </div>
                 </div>
@@ -188,7 +191,7 @@ function Header({ activeHeading }) {
                         <img
                           className="rounded-full w-[35px] h-[35px]"
                           //src={`${backend_url}/${user.avatar}`}
-                          src={`${backend_url}/${user.avatar.replace(
+                          src={`${backend_url}/uploads/${user.avatar.replace(
                             /\\/g,
                             "/"
                           )}`}
@@ -239,7 +242,7 @@ function Header({ activeHeading }) {
             <div className="relative mr-[20px]">
               <AiOutlineShoppingCart size={30} />
               <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 text-white text-[12px] leading-tight text-center">
-                5
+                {cart && cart.length}
               </span>
             </div>
           </div>
@@ -252,7 +255,7 @@ function Header({ activeHeading }) {
                   <div className="relative mt-5 ml-3">
                     <AiOutlineHeart size={30} className="mt-5 ml-3" />
                     <span className="absolute right-0 top-5 rounded-full bg-[#3bc177] w-4 h-4 text-white text-[12px] leading-tight text-center">
-                      1
+                      {wishlist && wishlist.length}
                     </span>
                   </div>
                   <RxCross1

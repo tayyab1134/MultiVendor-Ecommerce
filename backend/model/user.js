@@ -39,10 +39,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "user",
   },
-  avatar:{
+  avatar: {
     type: String,
-    required: true
- },
+    required: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

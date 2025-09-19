@@ -3,12 +3,12 @@ import { createReducer } from "@reduxjs/toolkit";
 
 const initialState = {
   isLoading: false,
-  //event: null,
-  //events: [],
-  //success: false,
-  //error: null,
-  //message: null,
-  //allEvents: [],
+  event: null,
+  events: [],
+  success: false,
+  error: null,
+  message: null,
+  allEvents: [],
 };
 
 export const eventReducer = createReducer(initialState, (builder) => {

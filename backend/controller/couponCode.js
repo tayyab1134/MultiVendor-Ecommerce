@@ -15,14 +15,14 @@ router.post(
       const { name, value, minAmount, maxAmount, selectedProducts, shop } =
         req.body;
 
-      // ✅ required fields only
+      //  required fields only
       if (!name || !value) {
         return next(
           new ErrorHandler("Name and discount percentage are required!", 400)
         );
       }
 
-      // ✅ check duplicate for same shop
+      //  check duplicate for same shop
       const isCouponExists = await CouponCode.findOne({ name, shop });
       if (isCouponExists) {
         return next(
@@ -30,7 +30,7 @@ router.post(
         );
       }
 
-      // ✅ allow selectedProducts empty
+      //  allow selectedProducts empty
       const coupon = await CouponCode.create({
         name,
         value,
@@ -85,6 +85,23 @@ router.delete(
       res.status(201).json({
         success: true,
         message: "Coupon code deleted successfully!",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
+
+//get  couponCode Value based on name
+router.get(
+  "/get-coupon-value/:name",
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const couponCode = await CouponCode.findOne({ name: req.params.name });
+
+      res.status(200).json({
+        success: true,
+        couponCode,
       });
     } catch (error) {
       return next(new ErrorHandler(error, 400));
