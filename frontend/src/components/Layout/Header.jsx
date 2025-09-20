@@ -16,6 +16,7 @@ import { AiOutlineHeart, AiOutlineShoppingCart } from "react-icons/ai";
 
 function Header({ activeHeading }) {
   const { isAuthenticated, user } = useSelector((state) => state.user);
+  const { isSeller } = useSelector((state) => state.seller);
   const { cart } = useSelector((state) => state.cart);
   const { wishlist } = useSelector((state) => state.wishlist);
   const allProducts = useSelector((state) => state.products.allProducts);
@@ -102,7 +103,6 @@ function Header({ activeHeading }) {
                   <div className="absolute w-full bg-white rounded-md shadow-md mt-2 z-50 max-h-[200px] overflow-y-auto search-dropdown">
                     {searchData.map((item) => (
                       <Link
-                        //to={`/product/${item.name.replace(/\s+/g, "-")}`}
                         to={`/product/${item._id}`}
                         key={item._id}
                         className="flex items-center gap-2 p-2 hover:bg-gray-100"
@@ -121,9 +121,10 @@ function Header({ activeHeading }) {
 
               {/* Become Seller */}
               <div className="hidden md:block bg-cyan-400 px-4 py-2 rounded-md">
-                <Link to="/shop-create">
+                <Link to={`${isSeller ? "/dashboard" : "/shop-create"}`}>
                   <span className="text-white flex items-center">
-                    Become Seller <IoIosArrowForward className="ml-1" />
+                    {isSeller ? "DASHBOARD" : "CREATE SHOP"}
+                    <IoIosArrowForward className="ml-1" />
                   </span>
                 </Link>
               </div>
@@ -190,7 +191,6 @@ function Header({ activeHeading }) {
                       <Link to="/profile">
                         <img
                           className="rounded-full w-[35px] h-[35px]"
-                          //src={`${backend_url}/${user.avatar}`}
                           src={`${backend_url}/uploads/${user.avatar.replace(
                             /\\/g,
                             "/"
@@ -301,9 +301,10 @@ function Header({ activeHeading }) {
                 <div
                   className={`${styles.button} ml-4 bg-cyan-400 !rounded-[4px]`}
                 >
-                  <Link to="/shop-create">
+                  <Link to={`${isSeller ? "/dashboard" : "/shop-create"}`}>
                     <span className="text-white flex items-center">
-                      Become Seller <IoIosArrowForward className="ml-1" />
+                      {isSeller ? "DASHBOARD" : "CREATE SHOP"}
+                      <IoIosArrowForward className="ml-1" />
                     </span>
                   </Link>
                 </div>

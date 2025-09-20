@@ -40,6 +40,29 @@ const productSchema = new mongoose.Schema({
     type: Object,
     required: true,
   },
+  reviews: [
+    {
+      user: {
+        type: Object,
+      },
+      rating: {
+        type: Number,
+      },
+      comment: {
+        type: String,
+      },
+      productId: {
+        type: String,
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now(),
+      },
+    },
+  ],
+  ratings: {
+    type: Number,
+  },
   sold_out: {
     type: Number,
     default: 0,

@@ -12,6 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { addToCart } from "../../redux/actions/cart";
 import { getAllProductsShop } from "../../redux/actions/product";
+import Ratings from "./Ratings";
 import {
   removeFromWishList,
   addToWishList,
@@ -19,6 +20,7 @@ import {
 
 function ProductDetails({ data }) {
   const allProducts = useSelector((state) => state.products.allProducts);
+
   const { wishlist } = useSelector((state) => state.wishlist);
   const { cart } = useSelector((state) => state.cart);
   const [count, setCount] = useState(1);
@@ -35,7 +37,7 @@ function ProductDetails({ data }) {
     } else {
       setClick(false);
     }
-  }, [dispatch, wishlist]);
+  }, [dispatch, wishlist, data]);
 
   const removeFromWishListHandler = (data) => {
     setClick(!click);
@@ -60,6 +62,32 @@ function ProductDetails({ data }) {
       }
     }
   };
+
+  const totalReviewsLength =
+    allProducts?.length > 0
+      ? allProducts.reduce(
+          (acc, product) => acc + (product?.reviews?.length || 0),
+          0
+        )
+      : 0;
+
+  const totalRatings =
+    allProducts?.length > 0
+      ? allProducts.reduce(
+          (acc, product) =>
+            acc +
+            (product.reviews?.length > 0
+              ? product.reviews.reduce(
+                  (sum, review) => sum + (review.rating || 0),
+                  0
+                )
+              : 0),
+          0
+        )
+      : 0;
+
+  const averageRating =
+    totalReviewsLength > 0 ? (totalRatings / totalReviewsLength).toFixed(1) : 0;
 
   const incrementCount = () => {
     setCount(count + 1);
@@ -88,7 +116,6 @@ function ProductDetails({ data }) {
                   className="w-full max-h-[500px] object-contain mb-4"
                 />
                 <div className="w-full flex gap-3">
-                  {/*{data?.images?.map((i, index) => (*/}
                   {data &&
                     data.images.map((i, index) => (
                       <div
@@ -183,7 +210,9 @@ function ProductDetails({ data }) {
                     <h3 className={`${styles.shop_name} pb-1 pt-1`}>
                       {data.shop.name}
                     </h3>
-                    <h5 className="pb-3 text-[15px]">(4/5) Ratings</h5>
+                    <h5 className="pb-3 text-[15px]">
+                      ({averageRating}/5) Ratings
+                    </h5>
                   </div>
                 </Link>
                 <div
@@ -197,7 +226,12 @@ function ProductDetails({ data }) {
               </div>
             </div>
           </div>
-          <ProductDetailsInfo data={data} allProducts={allProducts} />
+          <ProductDetailsInfo
+            data={data}
+            allProducts={allProducts}
+            totalReviewsLength={totalReviewsLength}
+            averageRating={averageRating}
+          />
           <br />
           <br />
         </div>
@@ -206,7 +240,12 @@ function ProductDetails({ data }) {
   );
 }
 
-const ProductDetailsInfo = ({ data, allProducts }) => {
+const ProductDetailsInfo = ({
+  data,
+  allProducts,
+  totalReviewsLength,
+  averageRating,
+}) => {
   const [active, setActive] = useState(1);
   return (
     <div className="bg-[#f5f6fb] px-3 800px:px-10 py-2 rounded ">
@@ -265,8 +304,27 @@ const ProductDetailsInfo = ({ data, allProducts }) => {
         </>
       ) : null}
       {active === 2 ? (
-        <div className="w-full justify-center min-h-[40vh] flex items-center ">
-          <p>No Reviews yet!</p>
+        <div className="w-full min-h-[40vh] flex flex-col items-center py-3 overflow-y-scroll">
+          {data && data.reviews && data.reviews.length > 0 ? (
+            data.reviews.map((item, index) => (
+              <div className="w-full flex my-2" key={index}>
+                <img
+                  src={`${backend_url}/uploads/${item.user.avatar}`}
+                  alt=""
+                  className="w-[50px] h-[50px] rounded-full"
+                />
+                <div className="pl-2 ">
+                  <div className="w-full flex items-center">
+                    <h1 className="font-[500] mr-3">{item.user?.name}</h1>
+                    <Ratings rating={data?.ratings} />
+                  </div>
+                  <p>{item.comment}</p>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No reviews available</p>
+          )}
         </div>
       ) : null}
       {active === 3 && (
@@ -275,14 +333,15 @@ const ProductDetailsInfo = ({ data, allProducts }) => {
             <Link to={`/shop/preview/${data.shop._id}`}>
               <div className="flex items-center">
                 <img
-                  // src={data?.shop?.avatar}
                   src={`${backend_url}/${data.shop.avatar}`}
                   className="w-[50px] h-[50px] rounded-full"
                   alt=""
                 />
                 <div className="pl-3">
                   <h3 className={`${styles.shop_name}`}>{data.shop.name}</h3>
-                  <h5 className="pb-2 text-[15px]">(4/5) Ratings</h5>
+                  <h5 className="pb-2 text-[15px]">
+                    ({averageRating}/5)Ratings
+                  </h5>
                 </div>
               </div>
             </Link>
@@ -307,7 +366,8 @@ const ProductDetailsInfo = ({ data, allProducts }) => {
               </h5>
 
               <h5 className="font-[600]">
-                Total Reviews: <span className="font-[500]">10</span>
+                Total Reviews:{" "}
+                <span className="font-[500]">{totalReviewsLength}</span>
               </h5>
 
               <Link to="/">

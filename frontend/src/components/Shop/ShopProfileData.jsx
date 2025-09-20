@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-//import { productData } from "../../static/data";
 import ProductCard from "../Route/ProductCard/ProductCard";
 import { Link, useParams } from "react-router-dom";
 import styles from "../../styles/styles";

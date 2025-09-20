@@ -18,6 +18,7 @@ import {
   addToWishList,
 } from "../../../redux/actions/wishlist.js";
 import { addToCart } from "../../../redux/actions/cart.js";
+import Ratings from "../../Products/Ratings.jsx";
 
 const ProductCard = ({ data }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
@@ -63,7 +64,6 @@ const ProductCard = ({ data }) => {
       <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
         <Link to={`/product/${data._id}`}>
           <img
-            //src={data?.image_Url?.[0]?.url}
             className="w-full h-[170px] object-contain"
             src={`${backend_url}/uploads/${data?.images?.[0]}`}
             alt={data?.name}
@@ -80,10 +80,7 @@ const ProductCard = ({ data }) => {
           </h4>
 
           <div className="flex">
-            {[1, 2, 3, 4].map((_, i) => (
-              <AiFillStar key={i} className="mr-1 text-yellow-400" size={20} />
-            ))}
-            <AiOutlineStar className="text-yellow-400" size={20} />
+            <Ratings rating={data?.ratings} />
           </div>
 
           {/* Price & Sold Out */}
@@ -97,7 +94,7 @@ const ProductCard = ({ data }) => {
               )}
             </div>
             <span className="font-[400] text-[14px] text-[#68d284]">
-              ({data.sold_out || 0} sold)
+              {data?.sold_out}sold
             </span>
           </div>
         </Link>

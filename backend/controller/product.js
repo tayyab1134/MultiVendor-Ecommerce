@@ -3,10 +3,11 @@ const router = express.Router();
 const Product = require("../model/product");
 const Shop = require("../model/shop");
 const upload = require("../multer");
+const Order = require("../model/order");
 const catchAsyncError = require("../middleware/catchAsyncError");
 const ErrorHandler = require("../utils/ErrorHandler");
 const fs = require("fs");
-const isSeller = require("../middleware/auth");
+const { isAuthenticated } = require("../middleware/auth");
 
 // create product
 
@@ -115,4 +116,57 @@ router.get(
   })
 );
 
+//review for a Product
+router.put(
+  "/create-new-review",
+  isAuthenticated,
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const { user, rating, comment, productId, orderId } = req.body;
+      const product = await Product.findById(productId);
+      const isReviwed = product.reviews.find(
+        (rev) => rev.user._id === req.user._id
+      );
+      const review = {
+        user,
+        rating,
+        comment,
+        productId,
+      };
+      if (isReviwed) {
+        product.reviews.forEach((rev) => {
+          if (rev.user._id.toString() === req.user._id.toString()) {
+            (rev.rating = rating), (rev.comment = comment), (rev.user = user);
+          }
+        });
+      } else {
+        product.reviews.push(review);
+      }
+      let avg = 0;
+      product.reviews.forEach((rev) => {
+        avg += rev.rating;
+      });
+      product.ratings = avg / product.reviews.length;
+      await product.save({ validateBeforeSave: false });
+
+      await Order.findByIdAndUpdate(
+        orderId,
+        {
+          $set: { "cart.$[elem].isReviewed": true },
+        },
+        {
+          arrayFilters: [{ "elem._id": productId }],
+          new: true,
+        }
+      );
+
+      res.status(200).json({
+        success: true,
+        message: "Reviewed Successfuly!",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error, 400));
+    }
+  })
+);
 module.exports = router;
