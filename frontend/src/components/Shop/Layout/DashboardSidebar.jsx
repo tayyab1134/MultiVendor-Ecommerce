@@ -213,7 +213,7 @@ function DashboardSidebar({ active }) {
 
       {/* Settings */}
       <div className="w-full flex items-center p-2 md:p-4">
-        <Link to="/dashboard-settings" className="w-full flex items-center">
+        <Link to="/settings" className="w-full flex items-center">
           <CiSettings
             size={25}
             className={`${

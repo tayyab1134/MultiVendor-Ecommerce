@@ -4,7 +4,7 @@ const catchAsyncError = require("../middleware/catchAsyncError");
 const router = express.Router();
 const Order = require("../model/order");
 const Product = require("../model/product");
-const { isAthuenticated, isSeller } = require("../middleware/auth");
+const { isSeller } = require("../middleware/auth");
 const Shop = require("../model/shop");
 //create Order (User)
 router.post(
@@ -159,6 +159,43 @@ router.put(
         order,
         message: "Order Refund Request Successfully!",
       });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+//accept the refund (Seller)
+router.put(
+  "/order-refund-success/:id",
+  isSeller,
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const order = await Order.findById(req.params.id);
+
+      if (!order) {
+        return next(new ErrorHandler("Order not found ", 400));
+      }
+      order.status = req.body.status;
+      await order.save();
+      res.status(200).json({
+        success: true,
+        message: "Order Refund Successfull!",
+      });
+      if (req.body.status === "Refund Success") {
+        for (const o of order.cart) {
+          await updateOrder(o._id, o.qty);
+        }
+      }
+
+      async function updateOrder(id, qty) {
+        const product = await Product.findById(id);
+        if (product) {
+          product.stock += qty;
+          product.sold_out -= qty;
+          await product.save({ validateBeforeSave: false });
+        }
+      }
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }

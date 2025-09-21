@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const fs = require("fs"); // ✅ Add this
+const fs = require("fs");
 const { isAuthenticated, isSeller } = require("../middleware/auth");
 const jwt = require("jsonwebtoken");
 const Shop = require("../model/shop");
@@ -212,4 +212,70 @@ router.get(
   })
 );
 
+//update shop  avatar
+router.put(
+  "/update-shop-avatar",
+  isSeller,
+  upload.single("avatar"), // multer middleware (field name: "avatar")
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const existsUser = await Shop.findById(req.seller._id);
+
+      if (req.file) {
+        // delete old avatar file if exists (safe check)
+        if (existsUser.avatar) {
+          const oldPath = path.join(
+            __dirname,
+            "..",
+            "uploads",
+            existsUser.avatar
+          );
+          if (fs.existsSync(oldPath)) {
+            fs.unlinkSync(oldPath);
+          }
+        }
+
+        // save new filename in DB
+        existsUser.avatar = req.file.filename;
+        await existsUser.save();
+      }
+
+      res.status(200).json({
+        success: true,
+        user: existsUser,
+      });
+    } catch (error) {
+      console.error("Update avatar error:", error);
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+//update seller InFo
+router.put(
+  "/update-seller-info",
+  isSeller,
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const { name, description, address, phoneNumber, zipCode } = req.body;
+      const shop = await Shop.findOne(req.seller._id);
+      if (!shop) {
+        return next(new ErrorHandler(error.message, 400));
+      }
+
+      shop.name = name;
+      shop.description = description;
+      shop.address = address;
+      shop.phoneNumber = phoneNumber;
+      shop.zipCode = zipCode;
+      await shop.save();
+      res.status(201).json({
+        success: true,
+        shop,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
 module.exports = router;

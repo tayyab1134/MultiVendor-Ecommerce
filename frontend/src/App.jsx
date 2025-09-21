@@ -16,6 +16,8 @@ import {
   ShopLoginPage,
   PaymentPage,
   OrderSuccessPage,
+  OrderDetailPage,
+  TrackOrderPage,
 } from "./routes/Routes.jsx";
 
 import React, { useEffect, useState } from "react";
@@ -40,7 +42,8 @@ import {
   ShopPreviewPage,
   ShopAllOrders,
   ShopOrderDetails,
-  OrderDetailPage,
+  ShopAllRefundsPage,
+  ShopSettingsPage,
 } from "./routes/ShopRoutes.js";
 import { getAllProducts } from "./redux/actions/product.js";
 import { getAllEvents } from "./redux/actions/event.js";
@@ -126,6 +129,14 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/user/track/order/:id"
+          element={
+            <ProtectedRoute>
+              <TrackOrderPage />
+            </ProtectedRoute>
+          }
+        />
         {/* shop routes */}
         <Route path="/shop-create" element={<ShopCreatePage />} />
         <Route path="/shop-login" element={<ShopLoginPage />} />
@@ -135,6 +146,14 @@ const App = () => {
           element={
             <SellerProtectedRoute>
               <ShopHomePage />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <SellerProtectedRoute>
+              <ShopSettingsPage />
             </SellerProtectedRoute>
           }
         />
@@ -208,6 +227,14 @@ const App = () => {
           element={
             <SellerProtectedRoute>
               <ShopAllCoupons />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-refunds"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllRefundsPage />
             </SellerProtectedRoute>
           }
         />

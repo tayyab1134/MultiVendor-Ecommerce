@@ -49,7 +49,7 @@ function DashboardHeader() {
           {seller && (
             <Link to={`/shop/${seller._id}`}>
               <img
-                src={`${backend_url}/${seller?.avatar}`}
+                src={`${backend_url}/uploads/${seller?.avatar}`}
                 alt=""
                 className="w-[40px] h-[40px] md:w-[50px] md:h-[50px] rounded-full object-cover"
               />

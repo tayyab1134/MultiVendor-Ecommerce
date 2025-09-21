@@ -3,7 +3,8 @@ import { backend_url, server } from "../../server";
 import styles from "../../styles/styles";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams , Link } from "react-router-dom";
+
 
 function ShopInfo({ isOwner }) {
   const allProducts = useSelector((state) => state.products.allProducts);
@@ -44,8 +45,7 @@ function ShopInfo({ isOwner }) {
           <div className="w-full py-5">
             <div className="w-full flex items-center justify-center">
               <img
-                src={`${backend_url}/${data?.avatar}`}
-                //alt={data?.name || "Shop"}
+                src={`${backend_url}/uploads/${data?.avatar}`}
                 alt=""
                 className="w-[150px] h-[150px] object-cover rounded-full"
               />
@@ -85,11 +85,13 @@ function ShopInfo({ isOwner }) {
 
           {isOwner && (
             <div className="py-3 px-4">
-              <div
-                className={`${styles.button} !w-full !h-[42px] !rounded-[5px]`}
-              >
-                <span className="text-white">Edit Shop</span>
-              </div>
+              <Link to="/settings">
+                <div
+                  className={`${styles.button} !w-full !h-[42px] !rounded-[5px]`}
+                >
+                  <span className="text-white">Edit Shop</span>
+                </div>
+              </Link>
               <div
                 onClick={logoutHandler}
                 className={`${styles.button} !w-full !h-[42px] !rounded-[5px]`}
