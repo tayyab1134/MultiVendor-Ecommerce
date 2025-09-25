@@ -10,38 +10,51 @@ const sendMail = require("../utils/sendMail");
 const catchAsyncError = require("../middleware/catchAsyncError");
 const sendToken = require("../utils/jwtToken");
 const { isAuthenticated, isAdmin } = require("../middleware/auth");
+const cloudinary = require("../cloudinary");
 
 //  !!!!!!!!!!Create User Route!!!!!!!!!!!!!
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
 
+    // check if user exists
     const userEmail = await User.findOne({ email });
-    if (userEmail) {
-      // Delete uploaded file if user already exists
-      const filename = req.file?.filename;
-      const filePath = `uploads/${filename}`;
-      if (filename && fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
+    if (userEmail) return next(new ErrorHandler("User already exists", 400));
 
-      return next(new ErrorHandler("User already exists", 400));
+    let avatarUrl = "";
+
+    // upload to Cloudinary if file exists
+    if (req.file) {
+      try {
+        const result = await cloudinary.uploader
+          .upload_stream({ folder: "user_avatars" }, (error, result) => {
+            if (error) throw error;
+            avatarUrl = result.secure_url;
+          })
+          .end(req.file.buffer);
+
+        // Actually, better way is to wrap upload_stream in a Promise:
+        avatarUrl = await new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { folder: "user_avatars" },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result.secure_url);
+            }
+          );
+          stream.end(req.file.buffer);
+        });
+      } catch (cloudError) {
+        console.error("Cloudinary upload failed:", cloudError);
+        return next(new ErrorHandler("Avatar upload failed", 500));
+      }
     }
 
-    const filename = req.file?.filename || "";
-
-    // ✅ Full URL for browser, fix backslashes
-    const fileUrl = filename
-      ? `${req.protocol}://${req.get("host")}/uploads/${filename.replace(
-          /\\/g,
-          "/"
-        )}`
-      : "";
     const user = {
       name,
       email,
       password,
-      avatar: fileUrl,
+      avatar: avatarUrl, // Save Cloudinary URL
     };
 
     // Create activation token
@@ -60,6 +73,7 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
       return res.status(201).json({
         success: true,
         message: `Please check your email (${user.email}) to activate your account!`,
+        avatar: avatarUrl,
       });
     } catch (emailError) {
       console.error("Email sending failed:", emailError);
