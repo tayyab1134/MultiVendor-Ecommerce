@@ -9,7 +9,7 @@ const jwt = require("jsonwebtoken");
 const sendMail = require("../utils/sendMail");
 const catchAsyncError = require("../middleware/catchAsyncError");
 const sendToken = require("../utils/jwtToken");
-const { isAuthenticated } = require("../middleware/auth");
+const { isAuthenticated, isAdmin } = require("../middleware/auth");
 
 //  !!!!!!!!!!Create User Route!!!!!!!!!!!!!
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
@@ -299,7 +299,6 @@ router.put(
   })
 );
 
-
 // delete user address
 router.delete(
   "/delete-user-address/:id",
@@ -353,6 +352,66 @@ router.put(
       res.status(200).json({
         success: true,
         message: "Password updated successfully!",
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// find user infoormation with the userId
+router.get(
+  "/user-info/:id",
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const user = await User.findById(req.params.id);
+
+      res.status(201).json({
+        success: true,
+        user,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+//get all Users ----> (Admin)
+router.get(
+  "/admin-all-users",
+  isAuthenticated,
+  isAdmin("Admin"),
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const users = await User.find().sort({
+        createdAt: -1,
+      });
+      res.status(200).json({
+        success: true,
+        users,
+      });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+//DeleteUser ---admin
+router.delete(
+  "/admin-delete-user/:id",
+  isAuthenticated,
+  isAdmin("Admin"),
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const user = await User.findById(req.params.id);
+      if (!user) {
+        return next(
+          new ErrorHandler(`User is not available with this ${id}!`, 400)
+        );
+      }
+      await User.findByIdAndDelete(req.params.id);
+      res.status(200).json({
+        success: true,
+        message: "User Deleted Successfully!",
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));

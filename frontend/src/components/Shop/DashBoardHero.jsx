@@ -19,7 +19,7 @@ const DashboardHero = () => {
   useEffect(() => {
     dispatch(getAllOrdersOfShop(seller._id));
     dispatch(getAllProductsShop(seller._id));
-  }, [dispatch]);
+  }, []);
 
   const availableBalance = seller?.availableBalance;
   const columns = [

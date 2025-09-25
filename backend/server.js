@@ -20,7 +20,7 @@ dbConnection();
 // create server
 const server = app.listen(process.env.PORT, () => {
   console.log(
-    `Server is running on the Prot http://localhost:${process.env.PORT}`
+    `Server is running on the Port http://localhost:${process.env.PORT}`
   );
 });
 

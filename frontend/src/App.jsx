@@ -18,6 +18,7 @@ import {
   OrderSuccessPage,
   OrderDetailPage,
   TrackOrderPage,
+  UserInbox,
 } from "./routes/Routes.jsx";
 
 import React, { useEffect, useState } from "react";
@@ -27,9 +28,10 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import Store from "./redux/store.js";
+import { store } from "./redux/store.js";
 import { loadSeller, loadUser } from "./redux/actions/user.js";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
+import ProtectedAdminRoute from "./routes/ProtectedAdminRoute.jsx";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute.jsx";
 import {
   ShopHomePage,
@@ -44,7 +46,19 @@ import {
   ShopOrderDetails,
   ShopAllRefundsPage,
   ShopSettingsPage,
+  ShopWithDrawMoneyPage,
+  ShopInboxPage,
 } from "./routes/ShopRoutes.js";
+
+import {
+  AdminDashboardPage,
+  AdminDashboardUsersPage,
+  AdminDashboardSellerPage,
+  AdminDashboardOrdersPage,
+  AdminDashboardProductsPage,
+  AdminDashboardEventsPage,
+  AdminDashboardWithdrawPage,
+} from "./routes/AdminRoutes.js";
 import { getAllProducts } from "./redux/actions/product.js";
 import { getAllEvents } from "./redux/actions/event.js";
 
@@ -59,10 +73,10 @@ const App = () => {
     }
   }
   useEffect(() => {
-    Store.dispatch(loadUser());
-    Store.dispatch(loadSeller());
-    Store.dispatch(getAllProducts());
-    Store.dispatch(getAllEvents());
+    store.dispatch(loadUser());
+    store.dispatch(loadSeller());
+    store.dispatch(getAllProducts());
+    store.dispatch(getAllEvents());
     getStripeApikey();
   }, []);
 
@@ -110,6 +124,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/inbox"
+          element={
+            <ProtectedRoute>
+              <UserInbox />
             </ProtectedRoute>
           }
         />
@@ -238,8 +260,81 @@ const App = () => {
             </SellerProtectedRoute>
           }
         />
+        <Route
+          path="/dashboard-withdraw-money"
+          element={
+            <SellerProtectedRoute>
+              <ShopWithDrawMoneyPage />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-messages"
+          element={
+            <SellerProtectedRoute>
+              <ShopInboxPage />
+            </SellerProtectedRoute>
+          }
+        />
         {/* Order SuccessPage */}
         <Route path="/orders/success" element={<OrderSuccessPage />} />
+        {/* Admin Routes */}
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardPage />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin-users"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardUsersPage />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin-sellers"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardSellerPage />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin-orders"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardOrdersPage />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin-products"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardProductsPage />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin-events"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardEventsPage />
+            </ProtectedAdminRoute>
+          }
+        />
+        <Route
+          path="/admin-withdraw-request"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardWithdrawPage />
+            </ProtectedAdminRoute>
+          }
+        />
       </Routes>
       <ToastContainer
         position="bottom-center"

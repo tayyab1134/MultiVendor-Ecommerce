@@ -4,7 +4,7 @@ const catchAsyncError = require("../middleware/catchAsyncError");
 const router = express.Router();
 const Order = require("../model/order");
 const Product = require("../model/product");
-const { isSeller } = require("../middleware/auth");
+const { isSeller, isAuthenticated , isAdmin } = require("../middleware/auth");
 const Shop = require("../model/shop");
 //create Order (User)
 router.post(
@@ -196,6 +196,27 @@ router.put(
           await product.save({ validateBeforeSave: false });
         }
       }
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+
+// All Orders for the Admin
+router.get(
+  "/admin-all-orders",
+  isAuthenticated,
+  isAdmin("Admin"),
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const orders = await Order.find().sort({
+        deliveredAt: -1,
+        createdAt: -1,
+      });
+      res.status(200).json({
+        success: true,
+        orders,
+      });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }

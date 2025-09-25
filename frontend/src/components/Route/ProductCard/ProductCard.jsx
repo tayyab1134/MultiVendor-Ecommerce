@@ -20,7 +20,7 @@ import {
 import { addToCart } from "../../../redux/actions/cart.js";
 import Ratings from "../../Products/Ratings.jsx";
 
-const ProductCard = ({ data }) => {
+const ProductCard = ({ data, isEvent }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const { cart } = useSelector((state) => state.cart);
   const [click, setClick] = useState(false);
@@ -62,7 +62,13 @@ const ProductCard = ({ data }) => {
   return (
     <>
       <div className="w-full h-[370px] bg-white rounded-lg shadow-sm p-3 relative cursor-pointer">
-        <Link to={`/product/${data._id}`}>
+        <Link
+          to={`${
+            isEvent === true
+              ? `/product/${data._id}?isEvent=true`
+              : `/product/${data._id}`
+          }`}
+        >
           <img
             className="w-full h-[170px] object-contain"
             src={`${backend_url}/uploads/${data?.images?.[0]}`}
@@ -74,7 +80,13 @@ const ProductCard = ({ data }) => {
           <h5 className={`${styles.shop_name}`}>{data.shop.name}</h5>
         </Link>
 
-        <Link to={`/product/${data._id}`}>
+        <Link
+          to={`${
+            isEvent === true
+              ? `/product/${data._id}?isEvent=true`
+              : `/product/${data._id}`
+          }`}
+        >
           <h4 className="pb-3 font-[500]">
             {data.name.length > 40 ? data.name.slice(0, 40) + "..." : data.name}
           </h4>

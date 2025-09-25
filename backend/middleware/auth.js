@@ -27,3 +27,14 @@ exports.isSeller = catchAsyncError(async (req, res, next) => {
   req.seller = await Shop.findById(decode.id);
   next();
 });
+
+exports.isAdmin = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new ErrorHandler(`${req.user.role} can not access this resources!`)
+      );
+    }
+    next();
+  };
+};
