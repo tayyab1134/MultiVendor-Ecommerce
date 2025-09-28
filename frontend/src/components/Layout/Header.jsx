@@ -92,7 +92,7 @@ function Header({ activeHeading }) {
                   placeholder="Search Product..."
                   value={searchTerm}
                   onChange={handleSearchChange}
-                  className="h-[40px] w-full px-4 border-2 border-blue-600 rounded-md text-black"
+                  className="h-[40px] w-full px-4 border-2 border-cyan-400 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-cyan-400"
                 />
                 <AiOutlineSearch
                   size={25}
@@ -140,7 +140,7 @@ function Header({ activeHeading }) {
           <div
             className={`transition-all duration-300 border ${
               active ? "shadow-sm fixed top-[70px] left-0 right-0 z-40" : ""
-            } w-full bg-blue-600`}
+            } w-full border-green-800 bg-cyan-500 800px:hidden`}
           >
             <div className="max-w-[1200px] mx-auto flex justify-between items-center px-4 h-[60px]">
               <div className="relative w-[270px] h-[50px] bg-white shadow-sm rounded-md hidden md:flex items-center px-3">
