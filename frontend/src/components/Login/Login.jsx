@@ -39,16 +39,19 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-r from-blue-500 to-purple-500 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-3xl font-semibold text-gray-900 text-center">
-          Login to your account
+        <h2 className="text-4xl font-bold text-white text-center animate-fade-in">
+          Welcome Back
         </h2>
+        <p className="mt-2 text-lg text-white text-center animate-fade-in">
+          Login to access your account.
+        </p>
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6 " onSubmit={handleSubmit}>
-            {/*    email Info  */}
+        <div className="bg-white py-8 px-6 shadow-lg rounded-lg sm:px-10">
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            {/* Email Input */}
             <div>
               <label
                 htmlFor="email"
@@ -64,11 +67,11 @@ const Login = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
                 />
               </div>
             </div>
-            {/*    Password Info  */}
+            {/* Password Input */}
             <div>
               <label
                 htmlFor="password"
@@ -76,7 +79,7 @@ const Login = () => {
               >
                 Password
               </label>
-              <div className="mt-1 relative ">
+              <div className="mt-1 relative">
                 <input
                   type={visible ? "text" : "password"}
                   name="password"
@@ -84,32 +87,31 @@ const Login = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
                 />
-                {/* toggle visibility password */}
                 {visible ? (
                   <AiOutlineEye
-                    className="absolute right-2 cursor-pointer top-2"
-                    size={25}
+                    className="absolute right-3 top-3 cursor-pointer text-gray-500"
+                    size={20}
                     onClick={() => setVisible(false)}
                   />
                 ) : (
                   <AiOutlineEyeInvisible
-                    className="absolute right-2 cursor-pointer top-2"
-                    size={25}
+                    className="absolute right-3 top-3 cursor-pointer text-gray-500"
+                    size={20}
                     onClick={() => setVisible(true)}
                   />
                 )}
               </div>
             </div>
-            {/* Remember me  */}
+            {/* Remember Me & Forgot Password */}
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <input
                   type="checkbox"
                   id="remember-me"
                   name="remember-me"
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
                 />
                 <label
                   htmlFor="remember-me"
@@ -121,7 +123,7 @@ const Login = () => {
               <div className="text-sm">
                 <a
                   href="#"
-                  className="font-medium text-blue-600 hover:text-blue-500 "
+                  className="font-medium text-purple-600 hover:text-purple-500"
                 >
                   Forgot Your Password?
                 </a>
@@ -131,15 +133,18 @@ const Login = () => {
             <div>
               <button
                 type="submit"
-                className="group h-[40px] relative w-full px-4 py-2 border border-transparent  text-sm font-medium flex justify-center rounded bg-blue-600 text-white hover:opacity-95"
+                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-300"
               >
-                Submit
+                Login
               </button>
             </div>
-            {/* Link to signUp */}
-            <div className=" flex items-center w-full">
-              <h4>Not have any Account?</h4>
-              <Link to="/signup" className="text-blue-600 pl-2">
+            {/* Sign Up Link */}
+            <div className="flex justify-center items-center mt-4 text-sm">
+              <span className="text-gray-600">Don't have an account?</span>
+              <Link
+                to="/signup"
+                className="text-purple-600 hover:text-purple-500 ml-1"
+              >
                 Sign Up
               </Link>
             </div>

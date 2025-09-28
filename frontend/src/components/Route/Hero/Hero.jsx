@@ -26,7 +26,9 @@ const Hero = () => {
           timeless, welcoming, and uniquely yours.
         </p>
         <Link to="/products" className="inline-block">
-          <div className={`${styles.button} mt-5`}>
+          <div
+            className={`${styles.button} mt-5 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-purple-500 hover:to-blue-500 text-white font-[Poppins] text-[18px] px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105`}
+          >
             <span className="text-[#fff] font-[Poppins] text-[18px]">
               Shop Now
             </span>

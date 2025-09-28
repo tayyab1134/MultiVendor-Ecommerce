@@ -46,19 +46,22 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-3xl font-semibold text-gray-900 text-center">
-          Register As A New User
-        </h2>
+    <div className="min-h-screen bg-gradient-to-r from-blue-500 to-purple-500 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      {/* Header Section */}
+      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center mb-6">
+        <h2 className="text-4xl font-bold text-white">Create Account</h2>
+        <p className="mt-2 text-lg text-white">
+          Join us today and enjoy exclusive benefits.
+        </p>
       </div>
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6 " onSubmit={handleSubmit}>
-            {/*    Input Full Name for Sign Up  */}
+      {/* Signup Form */}
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-white py-8 px-6 shadow-lg rounded-lg sm:px-10">
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            {/* Full Name Input */}
             <div>
               <label
-                htmlFor="Full Name"
+                htmlFor="name"
                 className="block text-sm font-medium text-gray-700"
               >
                 Full Name
@@ -71,17 +74,17 @@ const Signup = () => {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
             </div>
-            {/* Input for Email */}
+            {/* Email Input */}
             <div>
               <label
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Email address
+                Email Address
               </label>
               <div className="mt-1">
                 <input
@@ -91,11 +94,11 @@ const Signup = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
             </div>
-            {/*    Password Info  */}
+            {/* Password Input */}
             <div>
               <label
                 htmlFor="password"
@@ -103,7 +106,7 @@ const Signup = () => {
               >
                 Password
               </label>
-              <div className="mt-1 relative ">
+              <div className="mt-1 relative">
                 <input
                   type={visible ? "text" : "password"}
                   name="password"
@@ -111,60 +114,52 @@ const Signup = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
-                {/* toggle visibility password */}
                 {visible ? (
                   <AiOutlineEye
-                    className="absolute right-2 cursor-pointer top-2"
-                    size={25}
+                    className="absolute right-3 top-3 cursor-pointer text-gray-500"
+                    size={20}
                     onClick={() => setVisible(false)}
                   />
                 ) : (
                   <AiOutlineEyeInvisible
-                    className="absolute right-2 cursor-pointer top-2"
-                    size={25}
+                    className="absolute right-3 top-3 cursor-pointer text-gray-500"
+                    size={20}
                     onClick={() => setVisible(true)}
                   />
                 )}
               </div>
             </div>
-            {/* Input for Avatar */}
+            {/* Avatar Upload */}
             <div>
-              <h6 className="text-shadow-xs font-bold text-gray-900 flex mb-4">
+              <h6 className="text-shadow-xs font-bold text-gray-900 flex mb-2">
                 Profile Picture
               </h6>
-              <label
-                htmlFor="avatar"
-                className="text-sm block font-medium text-gray-700"
-              ></label>
               <div className="mt-2 flex items-center">
-                <span className="inline-block h-8 w-8 rounded-full overflow-hidden">
-                  {avatar instanceof Blob ? (
+                <span className="inline-block h-10 w-10 rounded-full border border-gray-300 overflow-hidden">
+                  {avatar ? (
                     <img
                       src={URL.createObjectURL(avatar)}
                       alt="avatar"
-                      className="h-full w-full object-cover rounded-full"
+                      className="h-full w-full object-cover"
                     />
                   ) : (
-                    <RxAvatar className="h-8 w-8" />
+                    <RxAvatar className="h-10 w-10 text-gray-400" />
                   )}
                 </span>
-                {/* File Input for Avatar */}
                 <label
                   htmlFor="file-input"
-                  className="ml-5 flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium
-                text-gray-700 bg-white hover:bg-gray-50 "
+                  className="ml-5 flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 cursor-pointer"
                 >
                   <span>Upload a file</span>
                   <input
                     type="file"
                     name="avatar"
                     id="file-input"
-                    accept=".jpg,.png,.gif,.pdf"
+                    accept=".jpg,.png,.gif"
                     onChange={handleFileInputChange}
                     className="sr-only"
-                    // Hide Class
                   />
                 </label>
               </div>
@@ -173,15 +168,18 @@ const Signup = () => {
             <div>
               <button
                 type="submit"
-                className="group h-[40px] relative w-full px-4 py-2 border border-transparent  text-sm font-medium flex justify-center rounded bg-blue-600 text-white hover:opacity-95"
+                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300"
               >
-                Submit
+                Sign Up
               </button>
             </div>
-            {/* Link to signUp */}
-            <div className=" flex items-center w-full">
-              <h4>Already have an Account?</h4>
-              <Link to="/login" className="text-blue-600 pl-2">
+            {/* Already have an account */}
+            <div className="flex justify-center items-center mt-4 text-sm">
+              <span className="text-gray-600">Already have an account?</span>
+              <Link
+                to="/login"
+                className="text-blue-600 hover:text-blue-500 ml-1"
+              >
                 Sign In
               </Link>
             </div>
