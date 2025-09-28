@@ -24,6 +24,10 @@ app.use(
 // Serve static files from /uploads via /uploads path
 app.use("/uploads", express.static("uploads"));
 
+app.use("/test", (req, res) => {
+  res.send("hello world");
+});
+
 // Config - Load environment variables if not in production
 if (process.env.NODE_ENV !== "PRODUCTION") {
   require("dotenv").config({ path: "config/.env" });
