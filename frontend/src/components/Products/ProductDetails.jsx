@@ -7,7 +7,7 @@ import {
   AiOutlineMessage,
   AiOutlineShoppingCart,
 } from "react-icons/ai";
-import { backend_url, server } from "../../server";
+import { server } from "../../server";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { addToCart } from "../../redux/actions/cart";
@@ -131,8 +131,12 @@ function ProductDetails({ data }) {
               {/* LEFT: Product Images (47%) */}
               <div className="w-full md:w-[47%]">
                 <img
-                  src={`${backend_url}/uploads/${data && data.images[select]}`}
-                  alt={data?.name}
+                  //src={`${backend_url}/${data && data.images[select]}`}
+                  //alt={data?.name}
+                  //src={`${data?.images?.[select]}`}
+                  //src={`${data && data.images[select]}`}
+                  src={`${data?.images?.[select]}`}
+                  alt=""
                   className="w-full max-h-[500px] object-contain mb-4"
                 />
                 <div className="w-full flex gap-3">
@@ -146,7 +150,8 @@ function ProductDetails({ data }) {
                         onClick={() => setSelect(index)}
                       >
                         <img
-                          src={`${backend_url}/uploads/${i}`}
+                          //src={`${backend_url}/uploads/${i}`}
+                          src={`${data?.images?.[select]}`}
                           alt=""
                           className="h-[100px] object-contain"
                         />
@@ -222,8 +227,13 @@ function ProductDetails({ data }) {
               <div className="flex items-center pt-8">
                 <Link to={`/shop/preview/${data.shop?._id}`}>
                   <img
-                    src={`${backend_url}/${data.shop.avatar}`}
-                    alt=""
+                    // src={`${backend_url}/${data.shop.avatar}`}
+                    //alt=""
+                    //src={shop?.avatar || "/default-avatar.png"}
+                    //src={`${data?.shop?.avatar?}`}
+                    //alt=""
+                    src={data?.shop?.avatar}
+                    alt={data?.shop?.name}
                     className="w-[50px] h-[50px] rounded-full mr-2"
                   />
                   <div className="pr-8">
@@ -329,7 +339,9 @@ const ProductDetailsInfo = ({
             data.reviews.map((item, index) => (
               <div className="w-full flex my-2" key={index}>
                 <img
-                  src={`${backend_url}/uploads/${item.user.avatar}`}
+                  //src={`${backend_url}/uploads/${item.user.avatar}`}
+                  //alt=""
+                  src={item.user.avatar}
                   alt=""
                   className="w-[50px] h-[50px] rounded-full"
                 />
@@ -353,7 +365,7 @@ const ProductDetailsInfo = ({
             <Link to={`/shop/preview/${data.shop._id}`}>
               <div className="flex items-center">
                 <img
-                  src={`${backend_url}/${data.shop.avatar}`}
+                  src={`${data?.shop?.avatar}`}
                   className="w-[50px] h-[50px] rounded-full"
                   alt=""
                 />

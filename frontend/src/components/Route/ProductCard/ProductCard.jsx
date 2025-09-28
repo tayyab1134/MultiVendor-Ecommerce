@@ -11,7 +11,7 @@ import {
   AiOutlineShoppingCart,
   AiOutlineStar,
 } from "react-icons/ai";
-import { backend_url } from "../../../server.js";
+
 import { useDispatch, useSelector } from "react-redux";
 import {
   removeFromWishList,
@@ -71,7 +71,9 @@ const ProductCard = ({ data, isEvent }) => {
         >
           <img
             className="w-full h-[170px] object-contain"
-            src={`${backend_url}/uploads/${data?.images?.[0]}`}
+            //src={`${backend_url}/uploads/${data?.images?.[0]}`}
+
+            src={`${data?.images[0]}`}
             alt={data?.name}
           />
         </Link>

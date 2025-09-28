@@ -10,7 +10,6 @@ import Cart from "../cart/Cart";
 import Wishlist from "../Wishlist/Wishlist";
 import { useSelector } from "react-redux";
 import { CgProfile } from "react-icons/cg";
-import { backend_url } from "../../server";
 import { RxCross1 } from "react-icons/rx";
 import { AiOutlineHeart, AiOutlineShoppingCart } from "react-icons/ai";
 
@@ -108,7 +107,11 @@ function Header({ activeHeading }) {
                         className="flex items-center gap-2 p-2 hover:bg-gray-100"
                       >
                         <img
-                          src={`${backend_url}/uploads/${item?.images?.[0]}`}
+                          src={
+                            item?.images[0]
+                              ? `${item.images[0]}`
+                              : "/placeholder.png"
+                          }
                           alt={item.name}
                           className="w-8 h-8 rounded object-cover"
                         />
@@ -191,11 +194,14 @@ function Header({ activeHeading }) {
                       <Link to="/profile">
                         <img
                           className="rounded-full w-[35px] h-[35px]"
-                          src={`${backend_url}/uploads/${user.avatar.replace(
-                            /\\/g,
-                            "/"
-                          )}`}
-                          alt=""
+                          src={
+                            user?.avatar
+                              ? `${user.avatar
+                                  .replace(/\\/g, "/")
+                                  .replace(/^uploads\//, "")}`
+                              : "/placeholder.png"
+                          }
+                          alt="Profile"
                         />
                       </Link>
                     ) : (
@@ -274,28 +280,27 @@ function Header({ activeHeading }) {
                     value={searchTerm}
                     onChange={handleSearchChange}
                   />
-                  {searchData && (
-                    <div className="absolute bg-[#fff] z-10 shadow w-full left-0 p-3">
-                      {searchData.map((i) => {
-                        const Product_name = i.name.replace(/\s+/g, "-");
-                        return (
-                          <Link to={`/product/${Product_name}`} key={i.name}>
-                            <div className="flex items-center">
-                              <img
-                                src={i.image_Url[0].url}
-                                //src={item.image_Url?.[0]?.url}
-                                alt=""
-                                className="w-[50px] mr-2"
-                              />
-                              <h5>{i.name}</h5>
-                            </div>
-                          </Link>
-                        );
-                      })}
+                  {searchData.length > 0 && searchTerm && (
+                    <div className="absolute bg-[#fff] z-10 shadow w-full left-0 p-3 search-dropdown">
+                      {searchData.map((item) => (
+                        <Link to={`/product/${item._id}`} key={item._id}>
+                          <div className="flex items-center gap-2 p-2 hover:bg-gray-100">
+                            <img
+                              src={
+                                item?.images?.[0]
+                                  ? `${item.images[0]}`
+                                  : "/placeholder.png"
+                              }
+                              alt={item.name}
+                              className="w-[50px] h-[50px] rounded object-cover"
+                            />
+                            <h5>{item.name}</h5>
+                          </div>
+                        </Link>
+                      ))}
                     </div>
                   )}
                 </div>
-
                 {/* Navbar */}
                 <Navbar active={activeHeading} />
                 <div
@@ -318,7 +323,13 @@ function Header({ activeHeading }) {
                     <div>
                       <Link to="/profile">
                         <img
-                          src={`${backend_url}/${user.avatar}`}
+                          src={
+                            user?.avatar
+                              ? `${user.avatar
+                                  .replace(/\\/g, "/")
+                                  .replace(/^uploads\//, "")}`
+                              : "/placeholder.png"
+                          }
                           alt="Profile"
                           className="w-[60px] h-[60px] rounded-full border-[3px] border-green-600"
                         />

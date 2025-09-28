@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const router = express.Router();
-const fs = require("fs"); // ✅ Add this
+const fs = require("fs");
 const ErrorHandler = require("../utils/ErrorHandler");
 const upload = require("../multer");
 const User = require("../model/user");

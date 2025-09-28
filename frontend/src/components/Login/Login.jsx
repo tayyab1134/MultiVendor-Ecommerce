@@ -12,51 +12,31 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
 
-  /*const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
         `${server}/user/login-user`,
-        {
-          email,
-          password,
-        },
+        { email, password },
         { withCredentials: true }
       );
-      toast.success("Login success!");
-      navigate("/");
-      window.location.reload(true);
+
+      //console.log("Login response:", data);
+
+      if (data.success) {
+        toast.success("Login success!");
+        navigate("/"); // navigate home
+        setTimeout(() => {
+          window.location.reload(); // reload after navigation
+        });
+      } else {
+        toast.error(data.message || "Login failed");
+      }
     } catch (err) {
-      console.error("Login error:", err.response?.data); // 👈 log it!
+      console.error("Login error:", err.response?.data);
       toast.error(err.response?.data?.message || "Login failed");
     }
   };
-  */
- const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const { data } = await axios.post(
-      `${server}/user/login-user`,
-      { email, password },
-      { withCredentials: true }
-    );
-
-    //console.log("Login response:", data);
-
-    if (data.success) {
-      toast.success("Login success!");
-      navigate("/"); // navigate home
-      setTimeout(() => {
-        window.location.reload(); // reload after navigation
-      },);
-    } else {
-      toast.error(data.message || "Login failed");
-    }
-  } catch (err) {
-    console.error("Login error:", err.response?.data);
-    toast.error(err.response?.data?.message || "Login failed");
-  }
-};
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "../../styles/styles"; // Make sure this file exists and has .normalFlex class
+import styles from "../../styles/styles";
 import { categoriesData } from "../../static/data";
 
 const DropDown = ({ setDropDown }) => {

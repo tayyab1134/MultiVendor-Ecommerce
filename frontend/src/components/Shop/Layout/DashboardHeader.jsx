@@ -5,7 +5,6 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { FiPackage, FiShoppingBag } from "react-icons/fi";
 import { BiMessageSquareDetail } from "react-icons/bi";
-import {backend_url} from "../../../server";
 
 function DashboardHeader() {
   const { seller } = useSelector((state) => state.seller);
@@ -18,38 +17,43 @@ function DashboardHeader() {
           <img
             src="https://shopo.quomodothemes.website/assets/images/logo.svg"
             alt=""
-            className="h-[40px] md:h-[50px] w-auto"  // Reduced logo size
+            className="h-[40px] md:h-[50px] w-auto" // Reduced logo size
           />
         </Link>
       </div>
 
       {/* Scrollable Icon Bar */}
       <div className="flex ml-4 overflow-x-auto max-w-full">
-        <div className="flex items-center gap-6 md:gap-10 min-w-max"> {/* Increased gap between icons */}
+        <div className="flex items-center gap-6 md:gap-10 min-w-max">
+          {" "}
+          {/* Increased gap between icons */}
           <Link to="/dashboard/cupouns">
             <AiOutlineGift color="#555" size={25} className="cursor-pointer" />
           </Link>
-
           <Link to="/dashboard-events">
-            <MdOutlineLocalOffer color="#555" size={25} className="cursor-pointer" />
+            <MdOutlineLocalOffer
+              color="#555"
+              size={25}
+              className="cursor-pointer"
+            />
           </Link>
-
           <Link to="/dashboard-products">
             <FiShoppingBag color="#555" size={25} className="cursor-pointer" />
           </Link>
-
           <Link to="/dashboard-orders">
             <FiPackage color="#555" size={25} className="cursor-pointer" />
           </Link>
-
           <Link to="/dashboard-messages">
-            <BiMessageSquareDetail color="#555" size={25} className="cursor-pointer" />
+            <BiMessageSquareDetail
+              color="#555"
+              size={25}
+              className="cursor-pointer"
+            />
           </Link>
-
           {seller && (
             <Link to={`/shop/${seller._id}`}>
               <img
-                src={`${backend_url}/uploads/${seller?.avatar}`}
+                src={`${seller?.avatar}`}
                 alt=""
                 className="w-[40px] h-[40px] md:w-[50px] md:h-[50px] rounded-full object-cover"
               />

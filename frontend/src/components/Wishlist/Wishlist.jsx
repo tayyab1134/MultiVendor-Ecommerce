@@ -7,15 +7,12 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromWishList } from "../../redux/actions/wishlist";
 import { addToCart } from "../../redux/actions/cart";
-import { backend_url } from "../../server";
 
 const Wishlist = ({ setOpenWishlist }) => {
   const { wishlist } = useSelector((state) => state.wishlist);
   const dispatch = useDispatch();
 
-  const removeFromWishListHandler = (id) => {
-    dispatch(removeFromWishList(id));
-  };
+  const removeHandler = (id) => dispatch(removeFromWishList(id));
 
   const addToCartHandler = (data) => {
     const newData = { ...data, qty: 1 };
@@ -41,11 +38,11 @@ const Wishlist = ({ setOpenWishlist }) => {
 
       {/* Cart Items List */}
       <div className="flex-1 overflow-y-auto px-1">
-        {wishlist.map((item, index) => (
+        {wishlist.map((item) => (
           <CartSingle
-            key={index}
+            key={item._id}
             data={item}
-            removeFromWishlistHandler={removeFromWishListHandler}
+            removeHandler={removeHandler}
             addToCartHandler={addToCartHandler}
           />
         ))}
@@ -54,7 +51,7 @@ const Wishlist = ({ setOpenWishlist }) => {
   );
 };
 
-const CartSingle = ({ data, addToCartHandler, removeFromWishListHandler }) => {
+const CartSingle = ({ data, addToCartHandler, removeHandler }) => {
   const [value] = useState(1);
   const totalPrice = data.discountPrice * value;
 
@@ -63,12 +60,10 @@ const CartSingle = ({ data, addToCartHandler, removeFromWishListHandler }) => {
       <div className="w-full flex items-center gap-2">
         <RxCross1
           className="cursor-pointer"
-          onClick={() => {
-            removeFromWishListHandler(data);
-          }}
+          onClick={() => removeHandler(data._id)}
         />
         <img
-          src={`${backend_url}/uploads/${data?.images[0]}`}
+          src={`${data?.images[0]}`}
           alt=""
           className="w-[60px] h-[60px] object-cover rounded-md"
         />
@@ -78,10 +73,7 @@ const CartSingle = ({ data, addToCartHandler, removeFromWishListHandler }) => {
           <h1 className="text-sm font-medium leading-4 line-clamp-2">
             {data.name}
           </h1>
-          {/*<h4 className="text-xs text-[#00000082]">
-            ${data.originalPrice} x {value}
-          </h4>
-          */}
+
           <h4 className="text-sm font-semibold text-[#d02222] pt-1">
             US${totalPrice}
           </h4>

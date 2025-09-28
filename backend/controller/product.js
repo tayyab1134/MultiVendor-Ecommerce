@@ -8,39 +8,66 @@ const catchAsyncError = require("../middleware/catchAsyncError");
 const ErrorHandler = require("../utils/ErrorHandler");
 const fs = require("fs");
 const { isAuthenticated, isAdmin } = require("../middleware/auth");
+const cloudinary = require("../cloudinary");
 
 // create product
 
 router.post(
   "/create-product",
-  upload.array("images"),
+  upload.array("images", 6), // max 6 images
   catchAsyncError(async (req, res, next) => {
     try {
       const shopId = req.body.shopId;
       const shop = await Shop.findById(shopId);
-      if (!shop) {
-        return next(new ErrorHandler("Shop Id is invalid", 400));
-      } else {
-        const files = req.files;
-        const imageUrls = files.map((file) => `${file.filename}`);
+      if (!shop) return next(new ErrorHandler("Shop Id is invalid", 400));
 
-        const productData = req.body;
-        productData.images = imageUrls;
-        productData.shop = shop;
+      const files = req.files;
+      if (!files || files.length === 0)
+        return next(new ErrorHandler("Please upload at least one image", 400));
 
-        const product = await Product.create(productData);
-
-        res.status(201).json({
-          success: true,
-          product,
+      // Helper function to upload a single file to Cloudinary
+      const uploadToCloudinary = (fileBuffer) => {
+        return new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { folder: "product_images" },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result.secure_url);
+            }
+          );
+          stream.end(fileBuffer);
         });
+      };
+
+      // Upload all images
+      const imageUrls = [];
+      for (const file of files) {
+        const url = await uploadToCloudinary(file.buffer);
+        imageUrls.push(url);
       }
+
+      // Prepare product data
+      const productData = {
+        ...req.body,
+        images: imageUrls,
+        shop: shop._id,
+        shop: shop,
+      };
+
+      const product = await Product.create(productData);
+
+      res.status(201).json({
+        success: true,
+        product,
+      });
     } catch (error) {
-      return next(new ErrorHandler(error, 400));
+      console.error("Create product error:", error);
+      return next(
+        new ErrorHandler(error.message || "Internal Server Error", 500)
+      );
     }
   })
 );
-
 // get all products of a shop
 
 router.get(

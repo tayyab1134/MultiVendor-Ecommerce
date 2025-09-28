@@ -9,43 +9,51 @@ const sendShopToken = require("../utils/shopToken");
 const ErrorHandler = require("../utils/ErrorHandler");
 const upload = require("../multer");
 const catchAsyncError = require("../middleware/catchAsyncError");
+const cloudinary = require("../cloudinary");
 
 const router = express.Router();
 
 // ===== Create Shop =====
+
 router.post("/create-shop", upload.single("file"), async (req, res, next) => {
   try {
     const { email } = req.body;
 
     // Check if email exists
     const existingSeller = await Shop.findOne({ email });
-    if (existingSeller) {
-      if (req.file?.filename) {
-        const filePath = path.join(
-          __dirname,
-          "..",
-          "uploads",
-          req.file.filename
-        );
-        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-      }
+    if (existingSeller)
       return next(new ErrorHandler("User already exists", 400));
-    }
 
-    // Prepare file URL
-    const filename = req.file?.filename || "";
-    const fileUrl = filename ? path.join("uploads", filename) : "";
+    let avatarUrl = "";
+
+    // Upload to Cloudinary if file exists
+    if (req.file) {
+      try {
+        avatarUrl = await new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { folder: "shop_avatars" },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result.secure_url);
+            }
+          );
+          stream.end(req.file.buffer);
+        });
+      } catch (cloudError) {
+        console.error("Cloudinary upload failed:", cloudError);
+        return next(new ErrorHandler("Avatar upload failed", 500));
+      }
+    }
 
     const sellerData = {
       name: req.body.name,
       email,
       password: req.body.password,
-      avatar: fileUrl,
+      avatar: avatarUrl, // Save Cloudinary URL
       address: req.body.address,
       phoneNumber: req.body.phoneNumber,
       zipCode: req.body.zipCode,
     };
-
     // Create activation token
     const activationToken = createActivationToken(sellerData);
 
@@ -213,7 +221,7 @@ router.get(
 );
 
 //update shop  avatar
-router.put(
+/*router.put(
   "/update-shop-avatar",
   isSeller,
   upload.single("avatar"), // multer middleware (field name: "avatar")
@@ -243,6 +251,53 @@ router.put(
       res.status(200).json({
         success: true,
         user: existsUser,
+      });
+    } catch (error) {
+      console.error("Update avatar error:", error);
+      return next(new ErrorHandler(error.message, 500));
+    }
+  })
+);
+*/
+
+router.put(
+  "/update-shop-avatar",
+  isSeller,
+  upload.single("avatar"),
+  catchAsyncError(async (req, res, next) => {
+    try {
+      const shop = await Shop.findById(req.seller._id);
+      if (!shop) {
+        return next(new ErrorHandler("Seller not found", 404));
+      }
+
+      if (req.file) {
+        // delete old avatar from Cloudinary if exists
+        if (shop.avatar && shop.avatar.public_id) {
+          await cloudinary.uploader.destroy(shop.avatar.public_id);
+        }
+
+        // upload new avatar to Cloudinary
+        const result = await new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { folder: "shop_avatars" },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result);
+            }
+          );
+          stream.end(req.file.buffer);
+        });
+
+        // save new Cloudinary details
+        shop.avatar = result.secure_url;
+
+        await shop.save();
+      }
+
+      res.status(200).json({
+        success: true,
+        shop,
       });
     } catch (error) {
       console.error("Update avatar error:", error);

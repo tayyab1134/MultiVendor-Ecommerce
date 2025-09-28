@@ -52,7 +52,7 @@ function AllProducts() {
     },
     {
       field: "preview",
-      headerName: "Preview", // ✅ Added header name
+      headerName: "Preview", //  Added header name
       flex: 0.8,
       minWidth: 120,
       sortable: false,
@@ -69,7 +69,7 @@ function AllProducts() {
     },
     {
       field: "delete",
-      headerName: "Delete", // ✅ Added header name
+      headerName: "Delete", //  Added header name
       flex: 0.8,
       minWidth: 120,
       sortable: false,

@@ -32,6 +32,8 @@ function CreateProduct() {
       window.location.reload();
     }
   }, [dispatch, error, success]);
+  
+
 
   const handleImageChange = (e) => {
     e.preventDefault();

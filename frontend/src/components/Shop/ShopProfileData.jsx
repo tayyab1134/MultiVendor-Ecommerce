@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllProductsShop } from "../../redux/actions/product";
 import { getAllEventsShop } from "../../redux/actions/event";
 import Ratings from "../Products/Ratings";
-import { backend_url } from "../../server";
 
 function ShopProfileData({ isOwner }) {
   const [active, setActive] = useState(1);
@@ -118,8 +117,8 @@ function ShopProfileData({ isOwner }) {
                 <img
                   src={
                     item?.user?.avatar
-                      ? `${backend_url}/uploads/${item.user.avatar}`
-                      : "/default-avatar.png"
+                      ? `${item.user.avatar}`
+                      : "/default-avatar.png" //  fallback if no avatar
                   }
                   className="w-[50px] h-[50px] rounded-full"
                   alt="user"

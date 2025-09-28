@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { backend_url, server } from "../../server";
+import { server } from "../../server";
 import styles from "../../styles/styles";
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -57,8 +57,8 @@ function ShopInfo({ isOwner }) {
           <div className="w-full py-5">
             <div className="w-full flex items-center justify-center">
               <img
-                src={`${backend_url}/uploads/${data?.avatar}`}
-                alt=""
+                src={`${data.avatar ? data.avatar : "/default-avatar.png"}`}
+                alt="profile"
                 className="w-[150px] h-[150px] object-cover rounded-full"
               />
             </div>

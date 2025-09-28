@@ -1,18 +1,7 @@
 const multer = require("multer");
-const path = require("path");
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    const ext = path.extname(file.originalname);
-    const filename = file.originalname.split(".")[0];
-    cb(null, filename + "-" + uniqueSuffix + ext);
-  },
-});
+// Use memory storage for Cloudinary
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
-//  Correctly exported as `upload`
-const upload = multer({ storage: storage });
 module.exports = upload;

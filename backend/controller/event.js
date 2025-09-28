@@ -7,43 +7,53 @@ const ErrorHandler = require("../utils/ErrorHandler");
 const { isSeller, isAuthenticated, isAdmin } = require("../middleware/auth");
 const router = express.Router();
 const fs = require("fs");
+const cloudinary = require("../cloudinary");
 
 router.post(
   "/create-event",
-  upload.array("images"),
+  upload.array("images", 6), // Limit: max 6 images
   catchAsyncError(async (req, res, next) => {
-    try {
-      const shopId = req.body.shopId;
-      const shop = await Shop.findById(shopId);
+    const shopId = req.body.shopId;
+    const shop = await Shop.findById(shopId);
 
-      if (!shop) {
-        return next(new ErrorHandler("Shop Id is invalid", 400));
-      }
+    if (!shop) return next(new ErrorHandler("Shop Id is invalid", 400));
 
-      const files = req.files;
-      if (!files || files.length === 0) {
-        return next(new ErrorHandler("Please upload at least one image", 400));
-      }
+    const files = req.files;
+    if (!files || files.length === 0)
+      return next(new ErrorHandler("Please upload at least one image", 400));
 
-      // Save all file names into images array
-      const imageUrls = files.map((file) => file.filename);
+    // Upload all images to Cloudinary
+    const imageUrls = await Promise.all(
+      files.map(
+        (file) =>
+          new Promise((resolve, reject) => {
+            const stream = cloudinary.uploader.upload_stream(
+              { folder: "event_images" },
+              (error, result) => {
+                if (error) reject(error);
+                else resolve(result.secure_url);
+              }
+            );
+            stream.end(file.buffer);
+          })
+      )
+    );
 
-      const eventData = req.body;
-      eventData.images = imageUrls; // ✅ match schema
-      eventData.shop = shop;
+    // Prepare event data
+    const eventData = {
+      ...req.body,
+      images: imageUrls, // Array of Cloudinary URLs
+      shop: shop._id,
+    };
 
-      const event = await Event.create(eventData);
+    const event = await Event.create(eventData);
 
-      res.status(201).json({
-        success: true,
-        event,
-      });
-    } catch (error) {
-      return next(new ErrorHandler(error.message || error, 400));
-    }
+    res.status(201).json({
+      success: true,
+      event,
+    });
   })
 );
-
 // get all events of a shop
 
 router.get(

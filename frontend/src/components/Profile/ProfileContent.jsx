@@ -3,7 +3,7 @@ import {
   AiOutlineCamera,
   AiOutlineDelete,
 } from "react-icons/ai";
-import { backend_url } from "../../server";
+
 import { useSelector, useDispatch } from "react-redux";
 import styles from "../../styles/styles";
 import { useState } from "react";
@@ -58,7 +58,7 @@ function ProfileContent({ active, setActive }) {
 
     try {
       const { data } = await axios.put(
-        `${server}/uploads/user/update-avatar`,
+        `${server}/user/update-avatar`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -84,7 +84,8 @@ function ProfileContent({ active, setActive }) {
             <div className="relative">
               <img
                 className="rounded-full w-[150px] h-[150px] object-cover border-[3px] border-green-400"
-                src={`${backend_url}/uploads/${user?.avatar}`}
+                //src={`${backend_url}/uploads/${user?.avatar}`}
+                src={`${user?.avatar}`}
                 alt=""
               />
               <div className="w-[30px] h-[30px] bg-white rounded-full flex items-center justify-center cursor-pointer absolute bottom-[5px] right-[5px]">
@@ -130,8 +131,6 @@ function ProfileContent({ active, setActive }) {
                 </div>
               </div>
 
-              {/* 2nd hai boss */}
-
               <div className="w-full flex 800px:block pb-3">
                 {/* Phone Number */}
 
@@ -157,8 +156,6 @@ function ProfileContent({ active, setActive }) {
                   />
                 </div>
               </div>
-
-              {/* 3rd hai boss */}
 
               <div className="w-full flex 800px:block pb-3"></div>
               <div className="flex justify-center">
@@ -567,15 +564,6 @@ const Address = () => {
       toast.error("Please fill all the fields!");
     } else {
       dispatch(
-        /* updateUserAddress({
-          country,
-          city,
-          address1,
-          address2,
-          zipCode,
-          addressType
-        )}
-          */
         updateUserAddress({
           country,
           city,

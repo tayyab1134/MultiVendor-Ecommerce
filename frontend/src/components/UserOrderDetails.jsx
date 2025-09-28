@@ -4,7 +4,7 @@ import { BsFillBagFill } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllOrdersOfUser } from "../redux/actions/order";
-import { backend_url, server } from "../server";
+import { server } from "../server";
 import { RxCross1 } from "react-icons/rx";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import axios from "axios";
@@ -25,11 +25,14 @@ const UserOrderDetails = () => {
       dispatch(getAllOrdersOfUser(user._id));
     }
   }, [dispatch, user._id]);
-
   const reviewHandler = async (e) => {
-    e.preventDefault();
-    await axios
-      .put(
+    e.preventDefault(); // prevent default form behavior
+    if (!selectedItem?._id || !rating) {
+      return toast.error("Select a product and rating first!");
+    }
+
+    try {
+      const res = await axios.put(
         `${server}/product/create-new-review`,
         {
           user,
@@ -38,22 +41,18 @@ const UserOrderDetails = () => {
           productId: selectedItem?._id,
           orderId: id,
         },
-        {
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        toast.success(res.data.message);
-        dispatch(getAllOrdersOfUser(user._id));
-        setComment("");
-        setRating(null);
-        setOpen(false);
-      })
-      .catch((error) => {
-        toast.error(error);
-      });
-  };
+        { withCredentials: true }
+      );
 
+      toast.success(res.data.message);
+      dispatch(getAllOrdersOfUser(user._id));
+      setComment("");
+      setRating(1); // reset rating
+      setOpen(false);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Something went wrong!");
+    }
+  };
   const refundHandler = async () => {
     await axios
       .put(`${server}/order/order-refund/${id}`, {
@@ -65,6 +64,7 @@ const UserOrderDetails = () => {
       })
       .catch((error) => toast.error(error.response.data.message));
   };
+
   return (
     <div className={`py-4 min-h-screen  ${styles.section}`}>
       <div className="w-full flex items-center justify-between">
@@ -86,29 +86,36 @@ const UserOrderDetails = () => {
       <br />
 
       {data &&
-        data.cart.map((item, index) => (
-          <div key={index} className="w-full flex items-start mb-5">
-            <img
-              src={`${backend_url}/uploads/${item.images[0]}`}
-              alt="item"
-              className="w-[80px] h-[80px]"
-            />
-            <div className="w-full">
-              <h5 className="pl-3 text-[20px]">{item.name}</h5>
-              <h5 className="pl-3 text-[20px] text-[#00000091]">
-                US${item.discountPrice} x {item.qty}
-              </h5>
-            </div>
-            {!item.isReviewed && data?.status === "Delivered" ? (
-              <div
-                className={`${styles.button} text-[#fff]`}
-                onClick={() => setOpen(true) || setSelectedItem(item)}
-              >
-                Write a review
+        data.cart.map(
+          (item, index) => (
+            (
+              <div key={index} className="w-full flex items-start mb-5">
+
+                <img
+                  //src={`${item.images[0]}`}
+                     src={item.images[0]}
+                  alt="item"
+                  className="w-[80px] h-[80px]"
+                />
+
+                <div className="w-full">
+                  <h5 className="pl-3 text-[20px]">{item.name}</h5>
+                  <h5 className="pl-3 text-[20px] text-[#00000091]">
+                    US${item.discountPrice} x {item.qty}
+                  </h5>
+                </div>
+                {!item.isReviewed && data?.status === "Delivered" ? (
+                  <div
+                    className={`${styles.button} text-[#fff]`}
+                    onClick={() => setOpen(true) || setSelectedItem(item)}
+                  >
+                    Write a review
+                  </div>
+                ) : null}
               </div>
-            ) : null}
-          </div>
-        ))}
+            )
+          )
+        )}
       {/* Review PopUp */}
 
       {open && (
@@ -126,7 +133,9 @@ const UserOrderDetails = () => {
             </h2>
             <div className="w-full flex  items-center">
               <img
-                src={`${backend_url}/uploads/${selectedItem?.images[0]}`}
+                //src={`${backend_url}/uploads/${selectedItem?.images[0]}`}
+                // alt=""
+                src={`${selectedItem?.images[0]}`}
                 alt=""
                 className="w-[80px] h-[80px]"
               />

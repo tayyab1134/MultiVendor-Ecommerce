@@ -5,7 +5,6 @@ import { HiPlus, HiOutlineMinus } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { backend_url } from "../../server";
 import { addToCart, removeFromCart } from "../../redux/actions/cart";
 
 const Cart = ({ setOpenCart }) => {
@@ -122,7 +121,7 @@ const CartSingle = ({ data, quantityChangeHandler, removeFromCartHandler }) => {
 
         {/* Product Image */}
         <img
-          src={`${backend_url}/uploads/${data?.images[0]}`}
+          src={`${data?.images[0]}`}
           alt=""
           className="w-[60px] h-[60px] object-cover rounded-md"
         />
