@@ -4,7 +4,6 @@ import { BiMessageSquareDetail } from "react-icons/bi";
 import { FiPackage, FiShoppingBag } from "react-icons/fi";
 import { MdOutlineLocalOffer } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { backend_url } from "../../server";
 import { useSelector } from "react-redux";
 
 const AdminHeader = () => {
@@ -52,7 +51,7 @@ const AdminHeader = () => {
           </Link>
 
           <img
-            src={`${backend_url}/uploads/${user?.avatar}`}
+            src={`${user?.avatar}`}
             className="w-[50px] h-[50px] rounded-full object-cover"
             alt="Seller Avatar"
           />

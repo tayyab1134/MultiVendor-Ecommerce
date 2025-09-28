@@ -237,34 +237,29 @@ router.put(
 router.put(
   "/update-avatar",
   isAuthenticated,
-  upload.single("avatar"), // multer middleware (field name: "avatar")
+  upload.single("avatar"), // 👈 match frontend "avatar"
   catchAsyncError(async (req, res, next) => {
     try {
-      const existsUser = await User.findById(req.user.id);
+      const user = await User.findById(req.user.id);
+      if (!user) return next(new ErrorHandler("User not found", 404));
 
-      if (req.file) {
-        // delete old avatar file if exists (safe check)
-        if (existsUser.avatar) {
-          const oldPath = path.join(
-            __dirname,
-            "..",
-            "uploads",
-            existsUser.avatar
-          );
-          if (fs.existsSync(oldPath)) {
-            fs.unlinkSync(oldPath);
-          }
+      if (!req.file) return next(new ErrorHandler("No file uploaded", 400));
+
+      // upload buffer to cloudinary
+      const result = await cloudinary.uploader.upload_stream(
+        { folder: "users_avatars", width: 150, crop: "scale" },
+        async (error, result) => {
+          if (error) return next(new ErrorHandler(error.message, 500));
+
+          user.avatar = result.secure_url;
+          await user.save();
+
+          res.status(200).json({ success: true, user });
         }
+      );
 
-        // save new filename in DB
-        existsUser.avatar = req.file.filename;
-        await existsUser.save();
-      }
-
-      res.status(200).json({
-        success: true,
-        user: existsUser,
-      });
+      // pipe the file buffer to cloudinary
+      result.end(req.file.buffer);
     } catch (error) {
       console.error("Update avatar error:", error);
       return next(new ErrorHandler(error.message, 500));

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Header from "../components/Layout/Header";
 import { useSelector } from "react-redux";
 import socketIO from "socket.io-client";
-const ENDPOINT = "http://localhost:4000/";
+const ENDPOINT = "http://localhost:4000"; // Replace with your server URL
 import { format } from "timeago.js";
 import { server } from "../server";
 import axios from "axios";
@@ -277,7 +277,7 @@ const MessageList = ({
     >
       <div className="relative">
         <img
-          src={`${userData?.avatar?.url}`}
+          src={`${userData?.avatar}`}
           alt=""
           className="w-[50px] h-[50px] rounded-full"
         />
@@ -318,7 +318,7 @@ const SellerInbox = ({
       <div className="w-full flex p-3 items-center justify-between bg-slate-200">
         <div className="flex">
           <img
-            src={`${userData?.avatar?.url}`}
+            src={`${userData?.avatar}`}
             alt=""
             className="w-[60px] h-[60px] rounded-full"
           />
@@ -346,7 +346,7 @@ const SellerInbox = ({
             >
               {item.sender !== sellerId && (
                 <img
-                  src={`${userData?.avatar?.url}`}
+                  src={`${userData?.avatar}`}
                   className="w-[40px] h-[40px] rounded-full mr-3"
                   alt=""
                 />

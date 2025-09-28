@@ -26,7 +26,7 @@ const DashboardMessages = () => {
   const [open, setOpen] = useState(false);
   const scrollRef = useRef(null);
 
-  // ✅ Listen for incoming socket messages
+  //  Listen for incoming socket messages
   useEffect(() => {
     socketId.on("getMessage", (data) => {
       console.log("Incoming message:", data);
@@ -39,7 +39,7 @@ const DashboardMessages = () => {
     });
   }, []);
 
-  // ✅ Push new arrival messages to state
+  //  Push new arrival messages to state
   useEffect(() => {
     if (
       arrivalMessage &&
@@ -54,12 +54,10 @@ const DashboardMessages = () => {
       try {
         const response = await axios.get(
           `${server}/conversation/get-all-conversation-seller/${seller?._id}`,
-        
-
 
           { withCredentials: true }
         );
-        console.log(response.data); // ✅ check here
+        console.log(response.data);
         console.log("Seller ID being sent:", seller?._id);
         setConversations(response.data.conversations);
       } catch (error) {
@@ -69,7 +67,7 @@ const DashboardMessages = () => {
     if (seller?._id) getConversation();
   }, [seller, messages]);
 
-  // ✅ Add user to socket
+  //  Add user to socket
   useEffect(() => {
     if (seller) {
       socketId.emit("addUser", seller._id);
@@ -79,14 +77,14 @@ const DashboardMessages = () => {
     }
   }, [seller]);
 
-  // ✅ Check if chat member is online
+  //  Check if chat member is online
   const onlineCheck = (chat) => {
     const chatMembers = chat.members.find((m) => m !== seller?._id);
     const online = onlineUsers.find((user) => user.userId === chatMembers);
     return online ? true : false;
   };
 
-  // ✅ Load chat messages
+  //  Load chat messages
   useEffect(() => {
     const getMessage = async () => {
       try {
@@ -103,7 +101,7 @@ const DashboardMessages = () => {
     getMessage();
   }, [currentChat]);
 
-  // ✅ Send text message
+  //  Send text message
   const sendMessageHandler = async (e) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
@@ -140,7 +138,7 @@ const DashboardMessages = () => {
     }
   };
 
-  // ✅ Update last message
+  //  Update last message
   const updateLastMessage = async (lastMsg) => {
     socketId.emit("updateLastMessage", {
       lastMessage: lastMsg,
@@ -173,7 +171,7 @@ const DashboardMessages = () => {
     reader.readAsDataURL(e.target.files[0]);
   };
 
-  // ✅ Send image message
+  //  Send image message
   const imageSendingHandler = async (file) => {
     const receiverId = currentChat.members.find(
       (member) => member !== seller?._id
@@ -205,7 +203,7 @@ const DashboardMessages = () => {
     }
   };
 
-  // ✅ Auto scroll down
+  //  Auto scroll down
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);

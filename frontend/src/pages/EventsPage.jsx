@@ -3,6 +3,7 @@ import EventCard from "../components/Events/EventCard";
 import { useSelector } from "react-redux";
 import Loader from "../components/Layout/Loader";
 import { useEffect } from "react";
+import Footer from "../components/Route/Footer";
 function EventsPage() {
   const { allEvents, isLoading } = useSelector((state) => state.events);
 
