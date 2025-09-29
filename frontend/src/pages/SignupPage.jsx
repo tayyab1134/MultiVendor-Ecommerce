@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import Signup from "../components/SignUp/Signup.jsx";
+import Signup from "../components/SignUp";
 import { Navigate, useNavigate } from "react-router-dom";
 
 const SignUppage = () => {
