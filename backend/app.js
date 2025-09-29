@@ -9,8 +9,8 @@ const app = express();
 
 // Middleware
 
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ limit: "10mb", extended: true }));
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 app.use(cookieParser());
 
@@ -25,7 +25,7 @@ app.use(
 app.use("/uploads", express.static("uploads"));
 
 //for deployment
-app.get("/", (req, res) => {
+app.get("/test", (req, res) => {
   res.send("Backend is running 🚀");
 });
 
