@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import { useDispatch } from "react-redux";
+import { loadUser } from "../../redux/actions/user.js";
 import { server } from "../../server";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
@@ -15,26 +17,35 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(
-        `${server}/user/login-user`,
-        { email, password },
-        { withCredentials: true }
-      );
+      const res = await fetch(`${server}/user/login-user`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+        credentials: "include",
+      });
 
       //console.log("Login response:", data);
 
-      if (data.success) {
-        toast.success("Login success!");
-        navigate("/"); // navigate home
-        setTimeout(() => {
-          window.location.reload(); // reload after navigation
-        });
-      } else {
-        toast.error(data.message || "Login failed");
+      const data = await res.json();
+      if (data.success == true) {
+        toast.success("Login Success!");
+        console.log("success");
+        dispatch(loadUser());
+        navigate("/");
+        window.location.reload(true);
       }
-    } catch (err) {
-      console.error("Login error:", err.response?.data);
-      toast.error(err.response?.data?.message || "Login failed");
+      if (data.success == false) {
+        toast.error(data.message);
+        console.log("error msg from server:  " + data.message);
+      }
+    } catch (e) {
+      console.log("catch Error: " + e.message);
+      toast.error(e.message);
     }
   };
 
