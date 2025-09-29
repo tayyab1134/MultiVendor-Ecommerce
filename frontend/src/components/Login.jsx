@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 //import { loadUser } from "../redux/actions/user.js";
 
-import { server } from "../../server";
+import { server } from "../../server.js";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
