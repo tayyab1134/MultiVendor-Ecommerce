@@ -24,8 +24,9 @@ app.use(
 // Serve static files from /uploads via /uploads path
 app.use("/uploads", express.static("uploads"));
 
-app.use("/test", (req, res) => {
-  res.send("hello world");
+//for deployment
+app.get("/", (req, res) => {
+  res.send("Backend is running 🚀");
 });
 
 // Config - Load environment variables if not in production
