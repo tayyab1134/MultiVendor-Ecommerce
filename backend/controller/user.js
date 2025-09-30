@@ -60,7 +60,7 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
     // Create activation token
     const activationToken = createActivationToken(user);
     console.log("Activation token (copy for Postman):", activationToken);
-    const activationUrl = `https://fronttt.netlify.app/activation/${activationToken}`;
+    const activationUrl = `https://multi-vendor-frontend-indol.vercel.app/activation/${activationToken}`;
 
     // Send activation email
     try {

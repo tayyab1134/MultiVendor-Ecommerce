@@ -15,7 +15,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ["https://fronttt.netlify.app", "http://localhost:5173"],
+    origin: ["https://multi-vendor-frontend-indol.vercel.app", "http://localhost:5173"],
     credentials: true,
   })
 );

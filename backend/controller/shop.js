@@ -58,7 +58,7 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
     const activationToken = createActivationToken(sellerData);
 
     // Activation URL (token passed as path param)
-    const activationUrl = `https://fronttt.netlify.app/seller/activation/${activationToken}`;
+    const activationUrl = `https://multi-vendor-frontend-indol.vercel.app/seller/activation/${activationToken}`;
 
     // Send activation email
     await sendMail({
