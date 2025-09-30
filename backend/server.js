@@ -13,7 +13,11 @@ process.on("uncaughtException", (error) => {
 //path: "config/.env",
 //})
 //}
+<<<<<<< HEAD
 if (process.env.NODE_ENV !== "production") {
+=======
+if (process.env.NODE_ENV !== "PRODUCTION") {
+>>>>>>> b623304cb3f1b993b24d0de3911317004c7c2bbc
   dotenv.config();
 }
 
