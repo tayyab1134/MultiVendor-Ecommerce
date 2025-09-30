@@ -58,7 +58,7 @@ router.post("/create-shop", upload.single("file"), async (req, res, next) => {
     const activationToken = createActivationToken(sellerData);
 
     // Activation URL (token passed as path param)
-    const activationUrl = `http://localhost:5173/seller/activation/${activationToken}`;
+    const activationUrl = `https://fronttt.netlify.app/seller/activation/${activationToken}`;
 
     // Send activation email
     await sendMail({
