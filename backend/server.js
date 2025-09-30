@@ -13,7 +13,9 @@ process.on("uncaughtException", (error) => {
 //path: "config/.env",
 //});
 //}
-dotenv.config();
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
 
 // CONNECT DB
 //dbConnection();
