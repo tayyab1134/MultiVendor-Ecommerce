@@ -4,3 +4,5 @@ node_modules/
 # Ignore uploads folder
 uploads/
 
+backend/.env
+
