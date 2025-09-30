@@ -4,7 +4,6 @@ const bodyParser = require("body-parser");
 const ErrorHandler = require("./middleware/error");
 const cors = require("cors");
 const path = require("path");
-
 const app = express();
 
 // Middleware
@@ -29,7 +28,6 @@ app.get("/test", (req, res) => {
   res.send("Backend is running 🚀");
 });
 
-// Config - Load environment variables if not in production
 if (process.env.NODE_ENV !== "PRODUCTION") {
   require("dotenv").config({ path: "config/.env" });
 }
