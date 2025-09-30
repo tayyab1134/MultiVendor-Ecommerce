@@ -29,13 +29,8 @@ app.get("/test", (req, res) => {
 });
 if (process.env.NODE_ENV !== "PRODUCTION") {
   dotenv.config();
-<<<<<<< HEAD
 } //if (process.env.NODE_ENV !== "PRODUCTION") {
 //require("dotenv").config({ path: "config/.env" })
-=======
-}//if (process.env.NODE_ENV !== "PRODUCTION") {
-//require("dotenv").config({ path: "config/.env" });
->>>>>>> b623304cb3f1b993b24d0de3911317004c7c2bbc
 //}
 
 //Import Routes
