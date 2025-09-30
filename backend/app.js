@@ -5,7 +5,7 @@ const ErrorHandler = require("./middleware/error");
 const cors = require("cors");
 const path = require("path");
 const app = express();
-
+const dotenv = require("dotenv");
 // Middleware
 
 app.use(express.json({ limit: "50mb" }));
@@ -27,10 +27,10 @@ app.use("/uploads", express.static("uploads"));
 app.get("/test", (req, res) => {
   res.send("Backend is running 🚀");
 });
-
-if (process.env.NODE_ENV !== "PRODUCTION") {
-  require("dotenv").config({ path: "config/.env" });
-}
+dotenv.config();
+//if (process.env.NODE_ENV !== "PRODUCTION") {
+//require("dotenv").config({ path: "config/.env" });
+//}
 
 //Import Routes
 const user = require("./controller/user");
