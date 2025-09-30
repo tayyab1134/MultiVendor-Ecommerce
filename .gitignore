@@ -5,4 +5,4 @@ node_modules/
 uploads/
 
 # Ignore environment file
-.env
+backend/.env
