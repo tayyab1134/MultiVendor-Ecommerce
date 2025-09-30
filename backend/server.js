@@ -18,21 +18,14 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 }
 
 // CONNECT DB
-//dbConnection();
-
-dbConnection().then(() => {
-  app.listen(process.env.PORT, () => {
-    console.log("abc");
-    console.log(`Server is running on the port: ${process.env.PORT}`);
-  });
-});
+dbConnection();
 
 // create server
-//const server = app.listen(process.env.PORT, () => {
-//console.log(
-//`Server is running on the Port http://localhost:${process.env.PORT}`
-//);
-//});
+const server = app.listen(process.env.PORT, () => {
+  console.log(
+    `Server is running on the Port http://localhost:${process.env.PORT}`
+  );
+});
 
 //unhandle Promise rejection
 process.on("unhandledRejection", (error) => {
