@@ -27,8 +27,9 @@ app.use("/uploads", express.static("uploads"));
 app.get("/test", (req, res) => {
   res.send("Backend is running 🚀");
 });
-dotenv.config();
-//if (process.env.NODE_ENV !== "PRODUCTION") {
+if (process.env.NODE_ENV !== "PRODUCTION") {
+  dotenv.config();
+}//if (process.env.NODE_ENV !== "PRODUCTION") {
 //require("dotenv").config({ path: "config/.env" });
 //}
 
