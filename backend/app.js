@@ -30,7 +30,7 @@ app.get("/test", (req, res) => {
 if (process.env.NODE_ENV !== "PRODUCTION") {
   dotenv.config();
 } //if (process.env.NODE_ENV !== "PRODUCTION") {
-//require("dotenv").config({ path: "config/.env" });
+//require("dotenv").config({ path: "config/.env" })
 //}
 
 //Import Routes
