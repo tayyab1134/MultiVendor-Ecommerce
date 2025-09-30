@@ -99,19 +99,19 @@ router.delete(
         return next(new ErrorHandler("Product not found with this id!", 404));
       }
 
-      // ✅ Check both `image` and `images` field (depends on schema)
+      //  Check both `image` and `images` field (depends on schema)
       const images = productData.image || productData.images;
 
       if (images && images.length > 0) {
         for (const imageUrl of images) {
           const filePath = `uploads/${imageUrl}`;
           if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath); // ✅ delete image from uploads
+            fs.unlinkSync(filePath); //  delete image from uploads
           }
         }
       }
 
-      // ✅ Delete product from DB
+      //  Delete product from DB
       await Product.findByIdAndDelete(productId);
 
       res.status(200).json({

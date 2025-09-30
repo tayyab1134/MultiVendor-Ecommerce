@@ -7,12 +7,6 @@ process.on("uncaughtException", (error) => {
   console.log("Shutting Down the Server for handling uncaughtException");
 });
 
-//config
-//if (process.env.NODE_ENV !== "PRODUCTION") {
-//require("dotenv").config({
-//path: "config/.env",
-//})
-//}
 if (process.env.NODE_ENV !== "PRODUCTION") {
   dotenv.config();
 }
