@@ -108,6 +108,11 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(process.env.PORT || 4000, () => {
-  console.log(`server is running on port ${process.env.PORT || 4000}`);
+const PORT = process.env.PORT || 4000;
+
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`✅ server is running on port ${PORT}`);
 });
+//server.listen(process.env.PORT || 4000, () => {
+//console.log(`server is running on port ${process.env.PORT || 4000}`);
+//});
