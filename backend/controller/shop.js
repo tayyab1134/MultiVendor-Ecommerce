@@ -184,10 +184,10 @@ router.get(
   catchAsyncError(async (req, res, next) => {
     try {
       res.cookie("seller_token", "", {
+        expires: new Date(Date.now()),
         httpOnly: true,
-        expires: new Date(0),
-        sameSite: "lax",
-        secure: process.env.NODE_ENV === "production",
+        sameSite: "none", 
+        secure: true, 
       });
 
       res.status(200).json({
