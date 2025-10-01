@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Header from "../components/Layout/Header";
 import { useSelector } from "react-redux";
 import socketIO from "socket.io-client";
-const ENDPOINT = "http://localhost:4000"; // Replace with your server URL
+const ENDPOINT = "https://multivendor-ecommerce-tayyab.up.railway.app"; // Replace with your server URL
 import { format } from "timeago.js";
 import { server } from "../server";
 import axios from "axios";
