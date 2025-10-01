@@ -1,5 +1,5 @@
-const sendShopToken = (seller, statusCode, res) => {
-  const token = seller.getJwtToken();
+const sendShopToken = (user, statusCode, res) => {
+  const token = user.getJwtToken();
 
   // Cookie options
   const options = {
@@ -9,13 +9,11 @@ const sendShopToken = (seller, statusCode, res) => {
     secure: true,
   };
 
-  res.status(statusCode).cookie("shop_token", token, options).json({
+  res.status(statusCode).cookie("seller_token", token, options).json({
     success: true,
-    seller,
+    user,
     token,
   });
 };
 
 module.exports = sendShopToken;
-
-
