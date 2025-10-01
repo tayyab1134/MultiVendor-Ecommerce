@@ -25,7 +25,7 @@ function ShopLogin() {
       toast.success("Login success!");
 
       navigate("/dashboard");
-      window.location.reload(true);
+      //window.location.reload(true);
     } catch (err) {
       console.error("Login error:", err.response?.data); // 👈 log it!
       toast.error(err.response?.data?.message || "Login failed");
