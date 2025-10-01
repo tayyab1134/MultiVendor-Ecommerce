@@ -49,7 +49,7 @@ function ShopInfo({ isOwner }) {
       await axios.get(`${server}/shop/logout`, { withCredentials: true });
       toast.success("Logout successful");
       window.location.reload();
-      navigate("/login-seller");
+      navigate("/shop-login");
     } catch (error) {
       toast.error("Failed to logout");
       console.log(error);
