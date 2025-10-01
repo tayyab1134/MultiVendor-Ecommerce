@@ -27,12 +27,9 @@ function ProfileSidebar({ active, setActive }) {
 
         navigate("/login");
       })
-      .catch(
-        (error) => {
-          toast.error(error.response.data.message);
-        },
-        { withCredentials: true }
-      );
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
   };
   return (
     <div className="w-56 md:w-64 bg-white shadow-[0_4px_6px_rgba(0,0,0,0.3)] rounded-[10px] p-4 pt-8 min-h-full">
