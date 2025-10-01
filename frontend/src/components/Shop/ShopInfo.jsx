@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { server } from "../../server";
 import styles from "../../styles/styles";
-import { useSelector } from "react-redux";
+import { useSelector, useNavigate } from "react-redux";
 import axios from "axios";
 import { useParams, Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function ShopInfo({ isOwner }) {
   const allProducts = useSelector((state) => state.products.allProducts);
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const { id } = useParams();
 
@@ -42,8 +44,15 @@ function ShopInfo({ isOwner }) {
   }, [id]);
 
   const logoutHandler = async () => {
-    await axios.get(`${server}/shop/logout`, { withCredentials: true });
-    window.location.reload();
+    try {
+      await axios.get(`${server}/shop/logout`, { withCredentials: true });
+      toast.success("Logout successful");
+      window.location.reload();
+      navigate("/login-seller");
+    } catch (error) {
+      toast.error("Failed to logout");
+      console.log(error);
+    }
   };
 
   return (
