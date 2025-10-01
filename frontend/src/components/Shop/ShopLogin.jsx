@@ -11,7 +11,7 @@ function ShopLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState("");
-  const handleSubmit = async (e) => {
+  /*const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
@@ -31,6 +31,42 @@ function ShopLogin() {
       toast.error(err.response?.data?.message || "Login failed");
     }
   };
+  */
+   const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    console.log("login called");
+
+    try {
+      const res = await fetch(`${server}/shop/login-seller`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+        credentials: "include",
+      });
+
+      const data = await res.json();
+      if (data.success == true) {
+        toast.success("Login Success!");
+        //dispatch(loadSeller());
+        navigate("/dashboard");
+      }
+      if (data.success == false) {
+        toast.error(data.message);
+        console.log("error msg from server:  " + data.message);
+      }
+    } catch (e) {
+      console.log("catch Error: " + e.message);
+      toast.error(e.message);
+    }
+  };
+
+
 
   return (
     <div className="w-screen h-screen flex items-center justify-center bg-gray-50">
