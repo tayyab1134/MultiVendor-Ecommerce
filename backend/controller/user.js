@@ -181,6 +181,7 @@ router.get(
 
 //logoout user
 
+// logout user
 router.get(
   "/logout",
   catchAsyncError(async (req, res, next) => {
@@ -188,11 +189,13 @@ router.get(
       res.cookie("token", null, {
         expires: new Date(Date.now()),
         httpOnly: true,
+        sameSite: "none", // must match login cookie
+        secure: true, // must match login cookie
       });
 
-      res.status(201).json({
+      res.status(200).json({
         success: true,
-        message: "Log out successfull",
+        message: "Logged out successfully",
       });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
