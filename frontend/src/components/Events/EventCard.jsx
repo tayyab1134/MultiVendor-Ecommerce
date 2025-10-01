@@ -71,7 +71,7 @@ const EventPage = ({ data }) => {
           </div>
           {/* Buttons at the bottom */}
           <div className="flex flex-wrap gap-4 mt-6">
-            <Link to={`/product/${data?._id}`}>
+            <Link to={`/product/${data._id}?isEvent=true`}>
               <button className="bg-black text-white px-5 py-2 rounded-lg shadow hover:bg-gray-800 transition">
                 See Details
               </button>
