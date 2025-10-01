@@ -32,7 +32,7 @@ function ShopLogin() {
     }
   };
   */
-   const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     console.log("login called");
@@ -53,8 +53,8 @@ function ShopLogin() {
       const data = await res.json();
       if (data.success == true) {
         toast.success("Login Success!");
-        //dispatch(loadSeller());
         navigate("/dashboard");
+        window.location.reload(true);
       }
       if (data.success == false) {
         toast.error(data.message);
@@ -65,8 +65,6 @@ function ShopLogin() {
       toast.error(e.message);
     }
   };
-
-
 
   return (
     <div className="w-screen h-screen flex items-center justify-center bg-gray-50">
